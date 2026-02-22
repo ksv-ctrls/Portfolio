@@ -5,11 +5,14 @@ const dns = require('dns');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-// Nodemailer Transporter
+// Check Environment Variables
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn('WARNING: EMAIL_USER or EMAIL_PASS not set in environment variables!');
+}
+
+// Nodemailer Transporter using the 'gmail' service (more robust for cloud)
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -19,7 +22,10 @@ const transporter = nodemailer.createTransport({
 // Verify Transporter on Startup
 transporter.verify((error, success) => {
     if (error) {
-        console.error('Nodemailer verification error:', error);
+        console.error('Nodemailer verification error details:');
+        console.error('- Message:', error.message);
+        console.error('- Code:', error.code);
+        console.error('- Command:', error.command);
     } else {
         console.log('Server is ready to send emails');
     }
