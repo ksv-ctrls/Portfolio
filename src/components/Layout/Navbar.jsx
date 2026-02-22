@@ -15,6 +15,28 @@ const Navbar = () => {
         { name: 'CONTACT', icon: <Mail size={18} />, href: '#contact' },
     ];
 
+    const handleNavClick = (e, href) => {
+        e.preventDefault();
+        setIsOpen(false);
+
+        const targetId = href.replace('#', '');
+        const element = document.getElementById(targetId);
+
+        if (element) {
+            // Small timeout to allow the menu closure to start and state to update
+            setTimeout(() => {
+                const offset = 80;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.scrollY - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }, 100);
+        }
+    };
+
     return (
         <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[98%] max-w-6xl z-50 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-300">
             <div className="mx-auto px-4 lg:px-6">
@@ -67,7 +89,7 @@ const Navbar = () => {
                                 <a
                                     key={item.name}
                                     href={item.href}
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={(e) => handleNavClick(e, item.href)}
                                     className="text-gray-300 hover:text-white hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium font-code flex items-center gap-3"
                                 >
                                     {item.icon}
