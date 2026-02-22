@@ -1,0 +1,197 @@
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    --outer-r: 24px;
+    --p-distance: 12px;
+}
+
+.carousel-track {
+    display: flex;
+}
+
+.carousel-item {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: calc(var(--outer-r) - var(--p-distance));
+    background-color: #0d0716;
+    overflow: hidden;
+    cursor: grab;
+    transition: border-color 0.3s;
+}
+
+.carousel-item:hover {
+    border-color: rgba(34, 211, 238, 0.4);
+}
+
+.carousel-item:active {
+    cursor: grabbing;
+}
+
+.carousel-container.round {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.carousel-item.round {
+    background-color: #0d0716;
+    position: relative;
+    bottom: 0.1em;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.carousel-item-header.round {
+    padding: 0;
+    margin: 0;
+}
+
+.carousel-indicators-container.round {
+    position: absolute;
+    z-index: 2;
+    bottom: 3em;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.carousel-item-header {
+    margin-bottom: 16px;
+    padding: 20px 20px 0 20px;
+}
+
+.carousel-icon-container {
+    display: flex;
+    height: 36px;
+    width: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(147, 51, 234, 0.3));
+    border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+.carousel-icon {
+    height: 18px;
+    width: 18px;
+    color: #22d3ee;
+}
+
+.carousel-item-content {
+    padding: 16px 20px 20px 20px;
+    flex: 1;
+}
+
+.carousel-item-category {
+    font-size: 10px;
+    font-family: 'Source Code Pro', monospace;
+    color: #f472b6;
+    border: 1px solid rgba(244, 114, 182, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+}
+
+.carousel-item-title {
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.carousel-item-description {
+    font-size: 13px;
+    color: rgba(156, 163, 175, 1);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.carousel-item-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.carousel-tech-tag {
+    font-size: 11px;
+    font-family: 'Source Code Pro', monospace;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.carousel-indicators-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.carousel-indicators {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.carousel-indicator {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 150ms, transform 150ms;
+}
+
+.carousel-indicator.active {
+    background-color: #22d3ee;
+}
+
+.carousel-indicator.inactive {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* === Responsive: Wide rectangular cards === */
+/* When the carousel item is wide (> ~500px), switch to horizontal layout */
+.carousel-item.wide-layout {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.carousel-item.wide-layout .carousel-item-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 32px 16px 32px 32px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.carousel-item.wide-layout .carousel-item-content {
+    padding: 32px 32px 32px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.carousel-item.wide-layout .carousel-item-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.carousel-item.wide-layout .carousel-item-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+}

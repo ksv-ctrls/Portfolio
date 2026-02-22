@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #020817;
+  --color-background-alt: #051a3d;
+  --color-background-subtle: #1e1b4b;
+
+  --color-primary-pink: #f472b6;
+  --color-primary-purple: #a855f7;
+  --color-primary-cyan: #06b6d4;
+  --color-primary-green: #10b981;
+
+  --color-glow-teal: #2dd4bf;
+  --color-glow-green: #10b981;
+  --color-glow-blue: #2563eb;
+
+  --font-grotesk: "Space Grotesk", sans-serif;
+  --font-code: "Source Code Pro", monospace;
+
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 20px #22d3ee;
+    }
+
+    50% {
+      opacity: .5;
+      box-shadow: 0 0 10px #9333ea;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-white font-grotesk overflow-x-hidden;
+  }
+}
+
+/* Custom Scanline Animation */
+.scanline {
+  width: 100%;
+  height: 100px;
+  z-index: 10;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(34, 211, 238, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.1;
+  background-size: 100% 100%;
+  animation: scanline 10s linear infinite;
+  pointer-events: none;
+  position: fixed;
+  top: -100px;
+}
+
+@keyframes scanline {
+  0% {
+    top: -100px;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+/* Custom Scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-purple);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.8), 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.box-glow {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.border-glow {
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.2), 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+.glass-panel {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl;
+}
