@@ -16,13 +16,16 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true, // Use SSL
+    family: 4,    // Force IPv4 to avoid ENETUNREACH errors on cloud systems
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
         rejectUnauthorized: false // Helps with some cloud network restrictions
-    }
+    },
+    connectionTimeout: 10000, // 10 seconds timeout
+    greetingTimeout: 10000
 });
 
 // Verify Transporter on Startup
