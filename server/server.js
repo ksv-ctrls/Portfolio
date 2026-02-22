@@ -16,17 +16,18 @@ console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: '74.125.130.108', // Direct Gmail IPv4 address to bypass Render's IPv6 routing issues
     port: 465,
     secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    // Adding logger to see the exact conversation between Render and Gmail
-    logger: true,
-    debug: true,
-    connectionTimeout: 20000, // Increase to 20s
+    tls: {
+        servername: 'smtp.gmail.com', // Required for SSL verification when using an IP host
+        rejectUnauthorized: false
+    },
+    connectionTimeout: 20000,
 });
 
 // Verify Transporter on Startup
