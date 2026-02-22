@@ -15,16 +15,19 @@ console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
-    secure: true, // Use SSL
-    family: 4,    // Force IPv4 to avoid ENETUNREACH errors on cloud systems
+    secure: true,
+    // Strictly force IPv4 using custom lookup
+    lookup: (hostname, options, callback) => {
+        dns.lookup(hostname, { family: 4 }, callback);
+    },
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false // Helps with some cloud network restrictions
+        rejectUnauthorized: false
     },
-    connectionTimeout: 10000, // 10 seconds timeout
+    connectionTimeout: 10000,
     greetingTimeout: 10000
 });
 
@@ -46,6 +49,26 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Test Route for Email
+app.get('/api/test-email', async (req, res) => {
+    try {
+        console.log('Starting manual email test...');
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.NOTIFY_EMAIL,
+            subject: "Test Email from Portfolio Backend",
+            text: "This is a direct test to confirm the deployment fix is working!"
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Test email sent successfully:', info.response);
+        res.json({ status: 'success', message: 'Test email sent!', info: info.response });
+    } catch (error) {
+        console.error('Test email failed:', error.message);
+        res.status(500).json({ status: 'failed', error: error.message });
+    }
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
