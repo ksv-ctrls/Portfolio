@@ -17,25 +17,23 @@ console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use STARTTLS (Port 587)
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2'
-    }
+    // Adding logger to see the exact conversation between Render and Gmail
+    logger: true,
+    debug: true,
+    connectionTimeout: 20000, // Increase to 20s
 });
 
 // Verify Transporter on Startup
 transporter.verify((error, success) => {
     if (error) {
-        console.error('Nodemailer verification error details:');
-        console.error('- Message:', error.message);
-        console.error('- Code:', error.code);
-        console.error('- Command:', error.command);
+        console.error('Nodemailer verification failure. Logic suggests a Network Block or IP restriction.');
+        console.error('- Error Message:', error.message);
     } else {
         console.log('SUCCESS: Server is ready to send emails');
     }
