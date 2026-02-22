@@ -6,16 +6,22 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 // Check Environment Variables
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.warn('WARNING: EMAIL_USER or EMAIL_PASS not set in environment variables!');
-}
+console.log('Checking environment variables...');
+console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'NOT SET');
+console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'NOT SET');
+console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 
-// Nodemailer Transporter using the 'gmail' service (more robust for cloud)
+// Nodemailer Transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Helps with some cloud network restrictions
     }
 });
 
@@ -27,12 +33,9 @@ transporter.verify((error, success) => {
         console.error('- Code:', error.code);
         console.error('- Command:', error.command);
     } else {
-        console.log('Server is ready to send emails');
+        console.log('SUCCESS: Server is ready to send emails');
     }
 });
-
-// Fix for querySrv ECONNREFUSED in some Node environments
-dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
