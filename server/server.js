@@ -1,44 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dns = require('dns');
-// Force Node.js to prefer IPv4 over IPv6 (fixes ENETUNREACH on many cloud providers)
-dns.setDefaultResultOrder('ipv4first');
-
 require('dotenv').config();
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 // Check Environment Variables
 console.log('Checking environment variables...');
-console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'NOT SET');
-console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'NOT SET');
+console.log('- RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'SET' : 'NOT SET');
+console.log('- NOTIFY_EMAIL:', process.env.NOTIFY_EMAIL ? 'SET' : 'NOT SET');
 console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 
-// Nodemailer Transporter
-const transporter = nodemailer.createTransport({
-    host: '74.125.130.108', // Direct Gmail IPv4 address to bypass Render's IPv6 routing issues
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        servername: 'smtp.gmail.com', // Required for SSL verification when using an IP host
-        rejectUnauthorized: false
-    },
-    connectionTimeout: 20000,
-});
-
-// Verify Transporter on Startup
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('Nodemailer verification failure. Logic suggests a Network Block or IP restriction.');
-        console.error('- Error Message:', error.message);
-    } else {
-        console.log('SUCCESS: Server is ready to send emails');
-    }
-});
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -47,22 +20,31 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// API Routes
+app.get('/', (req, res) => {
+    res.send('Portfolio Backend is running with Resend!');
+});
+
 // Test Route for Email
 app.get('/api/test-email', async (req, res) => {
     try {
-        console.log('Starting manual email test...');
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
+        console.log('Starting Resend email test...');
+        const { data, error } = await resend.emails.send({
+            from: 'Portfolio <onboarding@resend.dev>',
             to: process.env.NOTIFY_EMAIL,
-            subject: "Test Email from Portfolio Backend",
-            text: "This is a direct test to confirm the deployment fix is working!"
-        };
+            subject: 'Test Email from Resend',
+            text: 'This confirms that Resend API is working perfectly from Render!'
+        });
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Test email sent successfully:', info.response);
-        res.json({ status: 'success', message: 'Test email sent!', info: info.response });
+        if (error) {
+            console.error('Resend Test Error:', error);
+            return res.status(500).json({ status: 'failed', error });
+        }
+
+        console.log('Test email sent successfully via Resend');
+        res.json({ status: 'success', data });
     } catch (error) {
-        console.error('Test email failed:', error.message);
+        console.error('Test endpoint failure:', error.message);
         res.status(500).json({ status: 'failed', error: error.message });
     }
 });
@@ -82,11 +64,6 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', messageSchema);
 
-// API Routes
-app.get('/', (req, res) => {
-    res.send('Portfolio Backend is running!');
-});
-
 app.post('/api/contact', async (req, res) => {
     try {
         const { name, email, message } = req.body;
@@ -97,27 +74,24 @@ app.post('/api/contact', async (req, res) => {
         await newMessage.save();
         console.log('Message saved to MongoDB Atlas');
 
-        // Send response immediately (Non-blocking email)
+        // Send response immediately
         res.status(201).json({ message: 'Message sent successfully!' });
 
-        // Email Notification in Background
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
+        // Email Notification via Resend (Background)
+        resend.emails.send({
+            from: 'Portfolio <onboarding@resend.dev>',
             to: process.env.NOTIFY_EMAIL,
-            subject: `New Contact Form Submission from ${name}`,
+            subject: `New Portfolio Message from ${name}`,
             text: `
-        You have a new message from your portfolio:
-        
         Name: ${name}
         Email: ${email}
         Message: ${message}
       `
-        };
+        }).then(({ data, error }) => {
+            if (error) console.error('Resend delivery error:', error);
+            else console.log('Email delivered via Resend:', data.id);
+        }).catch(err => console.error('Resend background failure:', err.message));
 
-        // Fire and forget email
-        transporter.sendMail(mailOptions)
-            .then(info => console.log('Notification email sent successfully:', info.response))
-            .catch(mailError => console.error('SMTP/Nodemailer Error:', mailError));
     } catch (error) {
         console.error('Error in /api/contact logic:', error);
         res.status(500).json({ error: 'Failed to process message' });
