@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
+// Force Node.js to prefer IPv4 over IPv6 (fixes ENETUNREACH on many cloud providers)
+dns.setDefaultResultOrder('ipv4first');
+
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
@@ -14,21 +17,16 @@ console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'NOT SET');
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    // Strictly force IPv4 using custom lookup
-    lookup: (hostname, options, callback) => {
-        dns.lookup(hostname, { family: 4 }, callback);
-    },
+    port: 587,
+    secure: false, // Use STARTTLS (Port 587)
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
+    }
 });
 
 // Verify Transporter on Startup
