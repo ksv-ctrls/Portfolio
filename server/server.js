@@ -8,8 +8,8 @@ const nodemailer = require('nodemailer');
 // Nodemailer Transporter
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -65,7 +65,10 @@ app.post('/api/contact', async (req, res) => {
         await newMessage.save();
         console.log('Message saved to MongoDB Atlas');
 
-        // Email Notification
+        // Send response immediately (Non-blocking email)
+        res.status(201).json({ message: 'Message sent successfully!' });
+
+        // Email Notification in Background
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.NOTIFY_EMAIL,
@@ -79,15 +82,10 @@ app.post('/api/contact', async (req, res) => {
       `
         };
 
-        try {
-            const info = await transporter.sendMail(mailOptions);
-            console.log('Notification email sent successfully:', info.response);
-        } catch (mailError) {
-            console.error('SMTP/Nodemailer Error:', mailError);
-            // We don't fail the whole request if email fails, as DB is already saved
-        }
-
-        res.status(201).json({ message: 'Message sent successfully!' });
+        // Fire and forget email
+        transporter.sendMail(mailOptions)
+            .then(info => console.log('Notification email sent successfully:', info.response))
+            .catch(mailError => console.error('SMTP/Nodemailer Error:', mailError));
     } catch (error) {
         console.error('Error in /api/contact logic:', error);
         res.status(500).json({ error: 'Failed to process message' });

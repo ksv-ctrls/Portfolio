@@ -12,7 +12,7 @@ const Navbar = () => {
         { name: 'PROJECTS', icon: <Code size={18} />, href: '#projects' },
         { name: 'SKILLS', icon: <Zap size={18} />, href: '#skills' },
         { name: 'ACHIEVEMENTS', icon: <Trophy size={18} />, href: '#achievements' },
-        { name: 'CONTACT', icon: <Mail size={18} />, href: '#contact-info' },
+        { name: 'CONTACT', icon: <Mail size={18} />, href: '#contact' },
     ];
 
     return (
@@ -21,7 +21,7 @@ const Navbar = () => {
                 <div className="flex items-center justify-between h-14">
                     <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
                         <span className="font-grotesk font-bold text-sm lg:text-base tracking-wider text-primary-cyan group-hover:text-primary-pink transition-colors duration-300">
-                            PORTFOLIO <span className="text-primary-pink group-hover:text-primary-cyan transition-colors duration-300">[<span className="text-[10px] lg:text-xs mx-0.5">GET TO KNOW ME</span>]</span>
+                            PORTFOLIO <span className="text-primary-pink group-hover:text-primary-cyan transition-colors duration-300 hidden sm:inline">[<span className="text-[10px] lg:text-xs mx-0.5">GET TO KNOW ME</span>]</span>
                         </span>
                     </div>
 
