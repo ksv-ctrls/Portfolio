@@ -4,28 +4,28 @@ import { Briefcase, GraduationCap, Code } from 'lucide-react';
 
 const experience = [
     {
-        year: '2024-2026',
-        role: 'Software Faculty',
+        year: 'Feb 2026 - May 2026',
+        role: 'Technical Product Evangelist Intern',
+        company: 'Odyssey Technologies',
+        description: 'Conducted client demos, closed implementations for Scope Global School and BCS & Co, and led trials for Techfruits.',
+        type: 'Intern',
+        icon: <Code size={20} />
+    },
+    {
+        year: 'Mar 2024 - Jan 2026',
+        role: 'Part-time Faculty (Software)',
         company: 'Apollo Computer Education',
-        description: 'Technical Faculty for the MSA program, lecturing on a 10+ language stack from C++ to Full-Stack development.',
+        description: 'Trained 50+ students in programming fundamentals and advanced development concepts (C, C++, Python, Java, SQL, MERN).',
         type: 'work',
         icon: <Brain size={20} />
     },
     {
-        year: '2023',
-        role: 'Website Manager',
+        year: 'Nov 2023 - Jan 2024',
+        role: 'Website Manager / Part-time Employee',
         company: 'Octopus Consulting Services',
-        description: 'Built and managed the company’s entire web infrastructure from the ground up.',
+        description: 'Managed website content, improved SEO, handled social media platforms, and generated leads via multiple channels.',
         type: 'work',
         icon: <Briefcase size={20} />
-    },
-    {
-        year: '2026',
-        role: 'Technical Product Evangelist Intern',
-        company: 'Odyssey Technologies Ltd',
-        description: 'Communicating the technical architecture and core value of software solutions through live, deep-dive technical pitches.',
-        type: 'Intern',
-        icon: <Code size={20} />
     },
 ];
 
@@ -43,16 +43,16 @@ const TimelineItem = ({ item, index }) => (
         <div className="hidden md:block order-1 w-5/12" />
 
         {/* Timeline Dot */}
-        <div className="hidden md:flex z-20 items-center md:order-1 bg-background border-2 border-primary-cyan rounded-full w-10 h-10 justify-center shadow-[0_0_15px_rgba(34,211,238,0.5)] md:relative md:left-auto md:translate-x-0">
-            <span className="text-primary-cyan">{item.icon}</span>
+        <div className="hidden md:flex z-20 items-center md:order-1 bg-white dark:bg-background border-2 border-primary-blue rounded-full w-10 h-10 justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] md:relative md:left-auto md:translate-x-0">
+            <span className="text-primary-blue">{item.icon}</span>
         </div>
 
         {/* Card Content */}
-        <div className={`md:order-1 w-full md:w-5/12 ml-0 glass-panel bg-white/[0.12] md:bg-white/10 p-6 border-l-4 ${item.type === 'work' ? 'border-l-primary-purple' : 'border-l-primary-pink'} hover:bg-white/10 transition-colors`}>
-            <h3 className="font-bold text-lg md:text-xl text-white">{item.role}</h3>
-            <h4 className="font-code text-xs md:text-sm text-primary-cyan mb-2">{item.company}</h4>
-            <span className="text-[10px] md:text-xs text-gray-400 bg-white/5 px-2 py-1 rounded inline-block mb-3">{item.year}</span>
-            <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
+        <div className={`md:order-1 w-full md:w-5/12 ml-0 rounded-2xl bg-white dark:bg-black/40 backdrop-blur-xl p-6 border border-slate-200 dark:border-white/10 border-l-4 ${item.type === 'work' ? 'border-l-primary-violet' : 'border-l-primary-indigo'} shadow-[0_0_30px_rgba(99,102,241,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(99,102,241,0.4)] dark:hover:shadow-none hover:-translate-y-1 transition-all duration-300`}>
+            <h3 className="font-bold text-lg md:text-xl text-slate-800 dark:text-white">{item.role}</h3>
+            <h4 className="font-code text-xs md:text-sm text-primary-blue mb-2">{item.company}</h4>
+            <span className="text-[10px] md:text-xs text-slate-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 px-2 py-1 rounded inline-block mb-3">{item.year}</span>
+            <p className="text-slate-600 dark:text-gray-300 text-sm leading-relaxed">{item.description}</p>
         </div>
     </motion.div>
 );
@@ -77,14 +77,14 @@ const Timeline = () => {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-cyan to-primary-pink">
+                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-blue to-primary-violet">
                         Experience
                     </h2>
-                    <div className="h-1 w-24 bg-gradient-to-r from-primary-cyan to-primary-pink mx-auto mt-4 rounded-full" />
+                    <div className="h-1 w-24 bg-gradient-to-r from-primary-blue to-primary-violet mx-auto mt-4 rounded-full" />
                 </motion.div>
 
                 {/* Vertical Line - Positioned left on mobile, center on desktop */}
-                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-white/10" />
+                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary-blue/40 via-primary-violet/40 to-transparent dark:from-white/10 dark:via-white/10 dark:to-transparent rounded-full" />
 
                 <div className="relative">
                     {experience.map((item, index) => (

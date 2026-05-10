@@ -1,13 +1,17 @@
 .carousel-container {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 24px;
     padding: 16px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.03);
     backdrop-filter: blur(12px);
     --outer-r: 24px;
     --p-distance: 12px;
+}
+.dark .carousel-container {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .carousel-track {
@@ -21,16 +25,22 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: calc(var(--outer-r) - var(--p-distance));
-    background-color: #0d0716;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 30px rgba(79, 70, 229, 0.2);
     overflow: hidden;
     cursor: grab;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.dark .carousel-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.4); /* Matched to Hero black tint */
+    backdrop-filter: blur(8px);
 }
 
 .carousel-item:hover {
-    border-color: rgba(34, 211, 238, 0.4);
+    border-color: rgba(37, 99, 235, 0.4);
 }
 
 .carousel-item:active {
@@ -38,17 +48,25 @@
 }
 
 .carousel-container.round {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.dark .carousel-container.round {
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .carousel-item.round {
-    background-color: #0d0716;
+    background-color: rgba(255, 255, 255, 0.5);
     position: relative;
     bottom: 0.1em;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+.dark .carousel-item.round {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
 }
 
 .carousel-item-header.round {
@@ -76,14 +94,14 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(147, 51, 234, 0.3));
-    border: 1px solid rgba(34, 211, 238, 0.3);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(124, 58, 237, 0.3));
+    border: 1px solid rgba(37, 99, 235, 0.3);
 }
 
 .carousel-icon {
     height: 18px;
     width: 18px;
-    color: #22d3ee;
+    color: #2563eb;
 }
 
 .carousel-item-content {
@@ -93,29 +111,55 @@
 
 .carousel-item-category {
     font-size: 10px;
-    font-family: 'Source Code Pro', monospace;
-    color: #f472b6;
-    border: 1px solid rgba(244, 114, 182, 0.3);
+    font-family: 'JetBrains Mono', monospace;
+    color: #4f46e5;
+    border: 1px solid rgba(79, 70, 229, 0.3);
     padding: 2px 8px;
     border-radius: 4px;
     display: inline-block;
     margin-bottom: 10px;
     letter-spacing: 0.05em;
 }
+.dark .carousel-item-category {
+    color: #a5b4fc; /* Lighter indigo */
+    border: 1px solid rgba(165, 180, 252, 0.4);
+    background: rgba(99, 102, 241, 0.1);
+}
 
 .carousel-item-title {
     margin-bottom: 8px;
     font-weight: 700;
     font-size: 18px;
-    color: #ffffff;
+    color: #1e293b;
     letter-spacing: -0.01em;
+}
+.dark .carousel-item-title {
+    color: #ffffff;
 }
 
 .carousel-item-description {
     font-size: 13px;
-    color: rgba(156, 163, 175, 1);
+    color: #475569;
     line-height: 1.6;
+    margin-bottom: 8px;
+}
+.dark .carousel-item-description {
+    color: rgba(156, 163, 175, 1);
+}
+
+.carousel-item-details {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
     margin-bottom: 16px;
+    padding-left: 20px;
+    list-style-type: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.dark .carousel-item-details {
+    color: rgba(156, 163, 175, 0.9);
 }
 
 .carousel-item-tech {
@@ -126,12 +170,17 @@
 
 .carousel-tech-tag {
     font-size: 11px;
-    font-family: 'Source Code Pro', monospace;
+    font-family: 'JetBrains Mono', monospace;
+    color: #475569;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+.dark .carousel-tech-tag {
     color: rgba(255, 255, 255, 0.8);
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 3px 8px;
-    border-radius: 4px;
 }
 
 .carousel-indicators-container {
@@ -156,10 +205,13 @@
 }
 
 .carousel-indicator.active {
-    background-color: #22d3ee;
+    background-color: #2563eb;
 }
 
 .carousel-indicator.inactive {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+.dark .carousel-indicator.inactive {
     background-color: rgba(255, 255, 255, 0.2);
 }
 

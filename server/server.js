@@ -69,13 +69,14 @@ app.post('/api/contact', async (req, res) => {
         const { name, email, message } = req.body;
         console.log(`Processing new message from: ${name} (${email})`);
 
-        // Save to Database
-        const newMessage = new Message({ name, email, message });
-        await newMessage.save();
-        console.log('Message saved to MongoDB Atlas');
-
-        // Send response immediately
+        // Send response immediately to make the UI extremely fast
         res.status(201).json({ message: 'Message sent successfully!' });
+
+        // Save to Database in the background
+        const newMessage = new Message({ name, email, message });
+        newMessage.save()
+            .then(() => console.log('Message saved to MongoDB Atlas'))
+            .catch(err => console.error('MongoDB save error:', err));
 
         // Email Notification via Resend (Background)
         resend.emails.send({
@@ -89,12 +90,14 @@ app.post('/api/contact', async (req, res) => {
       `
         }).then(({ data, error }) => {
             if (error) console.error('Resend delivery error:', error);
-            else console.log('Email delivered via Resend:', data.id);
+            else console.log('Email delivered via Resend:', data?.id);
         }).catch(err => console.error('Resend background failure:', err.message));
 
     } catch (error) {
         console.error('Error in /api/contact logic:', error);
-        res.status(500).json({ error: 'Failed to process message' });
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to process message', details: error.message });
+        }
     }
 });
 

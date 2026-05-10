@@ -15,8 +15,8 @@ const Background = () => {
 
             {/* Radial Gradient Glows */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-background/40 to-background pointer-events-none" />
-            <div className="absolute -top-[10%] -left-[5%] w-[60%] h-[60%] rounded-full bg-primary-purple/20 blur-[140px]" />
-            <div className="absolute -bottom-[10%] -right-[5%] w-[60%] h-[60%] rounded-full bg-primary-cyan/20 blur-[140px]" />
+            <div className="absolute -top-[10%] -left-[5%] w-[60%] h-[60%] rounded-full bg-primary-violet/20 blur-[140px]" />
+            <div className="absolute -bottom-[10%] -right-[5%] w-[60%] h-[60%] rounded-full bg-primary-blue/20 blur-[140px]" />
         </div>
     );
 };

@@ -4,18 +4,18 @@ import { Code2, Cpu, Terminal, Layers, Database, Atom, Globe, Lock, Workflow } f
 
 const FloatingIcons = () => {
     const icons = [
-        { Icon: Code2, color: 'text-primary-cyan/10', size: 24 },
-        { Icon: Terminal, color: 'text-primary-pink/10', size: 20 },
-        { Icon: Cpu, color: 'text-primary-cyan/10', size: 28 },
-        { Icon: Layers, color: 'text-primary-pink/10', size: 22 },
-        { Icon: Database, color: 'text-primary-cyan/10', size: 20 },
-        { Icon: Atom, color: 'text-primary-pink/10', size: 26 },
-        { Icon: Globe, color: 'text-primary-cyan/10', size: 24 },
-        { Icon: Lock, color: 'text-primary-pink/10', size: 18 },
-        { Icon: Workflow, color: 'text-primary-cyan/10', size: 22 },
-        { Icon: Code2, color: 'text-primary-pink/10', size: 20 },
-        { Icon: Terminal, color: 'text-primary-cyan/10', size: 24 },
-        { Icon: Cpu, color: 'text-primary-pink/10', size: 22 },
+        { Icon: Code2, color: 'text-primary-blue/10', size: 24 },
+        { Icon: Terminal, color: 'text-primary-indigo/10', size: 20 },
+        { Icon: Cpu, color: 'text-primary-blue/10', size: 28 },
+        { Icon: Layers, color: 'text-primary-indigo/10', size: 22 },
+        { Icon: Database, color: 'text-primary-blue/10', size: 20 },
+        { Icon: Atom, color: 'text-primary-indigo/10', size: 26 },
+        { Icon: Globe, color: 'text-primary-blue/10', size: 24 },
+        { Icon: Lock, color: 'text-primary-indigo/10', size: 18 },
+        { Icon: Workflow, color: 'text-primary-blue/10', size: 22 },
+        { Icon: Code2, color: 'text-primary-indigo/10', size: 20 },
+        { Icon: Terminal, color: 'text-primary-blue/10', size: 24 },
+        { Icon: Cpu, color: 'text-primary-indigo/10', size: 22 },
     ];
 
     // Fixed random positions so they don't jump on re-render

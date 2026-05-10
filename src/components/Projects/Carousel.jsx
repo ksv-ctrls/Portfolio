@@ -32,6 +32,13 @@ function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, trans
                 <div className="carousel-item-category">{item.category}</div>
                 <div className="carousel-item-title">{item.title}</div>
                 <p className="carousel-item-description">{item.description}</p>
+                {item.details && (
+                    <ul className="carousel-item-details">
+                        {item.details.map((detail, i) => (
+                            <li key={i}>{detail}</li>
+                        ))}
+                    </ul>
+                )}
                 {item.tech && (
                     <div className="carousel-item-tech">
                         {item.tech.map((t, i) => (

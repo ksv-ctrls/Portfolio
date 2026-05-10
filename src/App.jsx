@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './components/Layout/Navbar';
-import Background from './components/Layout/Background';
+import { AuroraBackground } from './components/UI/AuroraBackground';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
 import Skills from './components/Skills/Skills';
@@ -11,33 +11,22 @@ import ContactInfo from './components/Contact/ContactInfo';
 import DataCollector from './components/Contact/DataCollector';
 
 import Welcome from './components/Welcome/Welcome';
+import { ContainerScroll } from './components/UI/container-scroll-animation';
 
 function App() {
   return (
-    <div className="relative min-h-screen text-white selection:bg-primary-cyan selection:text-background">
-      <Background />
+    <AuroraBackground className="text-slate-900 dark:text-white selection:bg-primary-blue selection:text-background">
       <Navbar />
 
-      <main className="pb-16">
-        {/* Intro Section with Background Video */}
-        <div className="relative w-full overflow-hidden min-h-screen">
-          {/* Background Video */}
-          <div className="absolute inset-0 z-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover opacity-90"
-            >
-              <source src="/InShot_20260222_083836318.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-background/20" />
-          </div>
-
+      <main className="pb-16 w-full">
+        {/* Intro Section */}
+        <div className="relative w-full overflow-hidden min-h-[40rem] md:min-h-[50rem]">
           <div className="relative z-10 w-full">
-            <Welcome />
-            <Hero />
+            <ContainerScroll
+              titleComponent={<Welcome />}
+            >
+              <Hero />
+            </ContainerScroll>
           </div>
         </div>
 
@@ -52,8 +41,7 @@ function App() {
           <DataCollector />
         </div>
       </main>
-
-    </div>
+    </AuroraBackground>
   );
 }
 

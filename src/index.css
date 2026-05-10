@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --color-background: #020817;
   --color-background-alt: #051a3d;
   --color-background-subtle: #1e1b4b;
 
-  --color-primary-pink: #f472b6;
-  --color-primary-purple: #a855f7;
-  --color-primary-cyan: #06b6d4;
-  --color-primary-green: #10b981;
+  --color-primary-indigo: #4f46e5;
+  --color-primary-violet: #7c3aed;
+  --color-primary-blue: #2563eb;
+  --color-primary-teal: #0d9488;
 
   --color-glow-teal: #2dd4bf;
   --color-glow-green: #10b981;
@@ -25,7 +27,7 @@
     0%,
     100% {
       opacity: 1;
-      box-shadow: 0 0 20px #22d3ee;
+      box-shadow: 0 0 20px #2563eb;
     }
 
     50% {
@@ -36,12 +38,23 @@
 }
 
 @layer base {
+  :root {
+    --white: #ffffff;
+    --black: #000000;
+    --transparent: transparent;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --indigo-300: #a5b4fc;
+    --violet-200: #ddd6fe;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-white font-grotesk overflow-x-hidden;
+    @apply bg-background text-slate-900 dark:text-white font-grotesk overflow-x-hidden;
   }
 }
 
@@ -50,7 +63,7 @@
   width: 100%;
   height: 100px;
   z-index: 10;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(34, 211, 238, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(37, 99, 235, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
   opacity: 0.1;
   background-size: 100% 100%;
   animation: scanline 10s linear infinite;
@@ -84,22 +97,22 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-purple);
+  background: var(--color-primary-violet);
 }
 
 .text-glow {
-  text-shadow: 0 0 10px rgba(6, 182, 212, 0.8), 0 0 20px rgba(168, 85, 247, 0.6);
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.8), 0 0 20px rgba(124, 58, 237, 0.6);
 }
 
 .box-glow {
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
 }
 
 .border-glow {
-  border: 1px solid rgba(6, 182, 212, 0.4);
-  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.2), 0 0 15px rgba(6, 182, 212, 0.3);
+  border: 1px solid rgba(37, 99, 235, 0.4);
+  box-shadow: inset 0 0 10px rgba(37, 99, 235, 0.2), 0 0 15px rgba(37, 99, 235, 0.3);
 }
 
 .glass-panel {
-  @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl;
+  @apply bg-black/[0.03] dark:bg-white/10 backdrop-blur-lg border border-black/10 dark:border-white/20 rounded-xl;
 }
