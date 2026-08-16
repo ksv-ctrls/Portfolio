@@ -19,7 +19,7 @@ const Welcome = () => {
                             delay={200}
                             animateBy="words"
                             direction="top"
-                            className="text-xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-slate-800 dark:text-white drop-shadow-2xl md:whitespace-nowrap"
+                            className="text-xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#211D1D] drop-shadow-xs md:whitespace-nowrap font-grotesk"
                         />
                     </div>
                 </motion.div>

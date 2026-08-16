@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, User, Mail, MessageSquare, Briefcase, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, User, Mail, MessageSquare, Loader2, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
 
 const DataCollector = () => {
     const [formData, setFormData] = useState({
@@ -8,7 +8,7 @@ const DataCollector = () => {
         email: '',
         message: ''
     });
-    const [status, setStatus] = useState('idle'); // idle, submitting, submitted, error
+    const [status, setStatus] = useState('idle');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,60 +43,64 @@ const DataCollector = () => {
     };
 
     return (
-        <section id="contact" className="min-h-screen py-20 px-4 flex items-center justify-center relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-primary-violet/5 dark:from-[#051a3d] dark:via-[#020817]/90 dark:to-primary-violet/10 pointer-events-none" />
-
-            <div className="max-w-4xl w-full relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <section id="contact" className="py-20 px-4 flex items-center justify-center relative">
+            <div className="max-w-4xl w-full relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
                 {/* Text Content */}
                 <div className="flex flex-col justify-center">
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 0, x: -40 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold text-slate-800 dark:text-white drop-shadow-sm mb-6">
-                            Drop your Contact
+                        <span className="inline-flex items-center gap-1 text-xs font-code tracking-widest text-[#7A1822] uppercase font-bold bg-[#7A1822]/10 px-3 py-1 rounded-full border border-[#7A1822]/20 mb-3">
+                            <Sparkles size={12} />
+                            DIRECT MESSAGE
+                        </span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-[#211C1D] tracking-tight mt-1 mb-6">
+                            Drop a Line
                         </h2>
-                        <p className="text-slate-600 dark:text-gray-400 text-base md:text-lg mb-8 leading-relaxed">
-                            Have a <span className="text-primary-indigo font-medium">question</span> or a <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-blue to-primary-violet font-semibold">project in mind?</span> Drop your contact info here.
+                        <p className="text-[#70676A] text-base md:text-lg mb-8 leading-relaxed font-medium">
+                            Have a <span className="text-[#7A1822] font-bold">question</span> or a <span className="text-[#24112F] font-bold">project in mind?</span> Drop your contact info here.
                             <br className="hidden md:block" /><br className="hidden md:block" />
-                            Lets start our journey together.
+                            Let’s start our journey together.
                         </p>
 
-                        <div className="flex flex-col gap-4 font-code text-sm text-slate-500 dark:text-gray-500">
-                            <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-primary-teal rounded-full animate-pulse" />
-                                <span className="tracking-widest">STATUS: OPEN FOR WORK</span>
+                        <div className="flex flex-col gap-4 font-code text-sm">
+                            <div className="flex items-center gap-3">
+                                <span className="w-2.5 h-2.5 bg-[#7A1822] rounded-full animate-pulse" />
+                                <span className="tracking-widest font-bold text-[#7A1822]">STATUS: OPEN FOR WORK</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-primary-violet rounded-full animate-pulse" />
-                                <span className="tracking-widest">LOCATION: CHENNAI INDIA (REMOTE ENABLED)</span>
+                            <div className="flex items-center gap-3">
+                                <span className="w-2.5 h-2.5 bg-[#9BB6D3] rounded-full animate-pulse" />
+                                <span className="tracking-widest font-bold text-[#9BB6D3]">LOCATION: CHENNAI, INDIA (REMOTE)</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <span className="w-2.5 h-2.5 bg-[#D5B36A] rounded-full animate-pulse" />
+                                <span className="tracking-widest font-bold text-[#D5B36A]">AVAILABILITY: IMMEDIATE</span>
                             </div>
                         </div>
                     </motion.div>
                 </div>
 
-                {/* Form */}
+                {/* Elevated Form Card — Warm White #FCF9F5 block with Layered Depth Shadow */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="p-8 bg-white dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl relative shadow-[0_0_30px_rgba(99,102,241,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(99,102,241,0.4)] dark:hover:shadow-none transition-shadow"
+                    className="p-8 bg-[#FCF9F5] border border-[#E8DFD8] rounded-2xl relative shadow-[0_24px_60px_rgba(33,28,29,0.14),0_8px_24px_rgba(90,16,24,0.08)] hover:border-[#7A1822]/40 transition-all duration-300"
                 >
-
-
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <label className="text-xs font-code tracking-wider text-slate-500 dark:text-gray-400">NAME</label>
+                            <label className="text-xs font-code tracking-wider text-[#7A1822] font-bold">NAME</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-3 text-slate-400 dark:text-gray-500" size={18} />
+                                <User className="absolute left-3 top-3 text-[#9BB6D3]" size={18} />
                                 <input
                                     type="text"
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    className="w-full bg-white dark:bg-background/50 border border-slate-300 dark:border-white/10 rounded-lg py-2 pl-10 pr-4 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-primary-blue focus:shadow-[0_0_10px_rgba(37,99,235,0.1)] dark:focus:shadow-[0_0_10px_rgba(37,99,235,0.3)] transition-all"
+                                    className="w-full bg-[#F7F1EB] border border-[#E8DFD8] rounded-lg py-2.5 pl-10 pr-4 text-[#211C1D] placeholder:text-[#70676A]/50 focus:outline-none focus:border-[#7A1822] focus:ring-1 focus:ring-[#7A1822] transition-all font-grotesk"
                                     placeholder="Enter Name"
                                     required
                                 />
@@ -104,15 +108,15 @@ const DataCollector = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-code tracking-wider text-slate-500 dark:text-gray-400">EMAIL</label>
+                            <label className="text-xs font-code tracking-wider text-[#7A1822] font-bold">EMAIL</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-3 text-slate-400 dark:text-gray-500" size={18} />
+                                <Mail className="absolute left-3 top-3 text-[#9BB6D3]" size={18} />
                                 <input
                                     type="email"
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className="w-full bg-white dark:bg-background/50 border border-slate-300 dark:border-white/10 rounded-lg py-2 pl-10 pr-4 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-primary-blue focus:shadow-[0_0_10px_rgba(37,99,235,0.1)] dark:focus:shadow-[0_0_10px_rgba(37,99,235,0.3)] transition-all"
+                                    className="w-full bg-[#F7F1EB] border border-[#E8DFD8] rounded-lg py-2.5 pl-10 pr-4 text-[#211C1D] placeholder:text-[#70676A]/50 focus:outline-none focus:border-[#7A1822] focus:ring-1 focus:ring-[#7A1822] transition-all font-grotesk"
                                     placeholder="email@domain.com"
                                     required
                                 />
@@ -120,28 +124,29 @@ const DataCollector = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-code tracking-wider text-slate-500 dark:text-gray-400">MESSAGE</label>
+                            <label className="text-xs font-code tracking-wider text-[#7A1822] font-bold">MESSAGE</label>
                             <div className="relative">
-                                <MessageSquare className="absolute left-3 top-3 text-slate-400 dark:text-gray-500" size={18} />
+                                <MessageSquare className="absolute left-3 top-3 text-[#9BB6D3]" size={18} />
                                 <textarea
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
                                     rows="4"
-                                    className="w-full bg-white dark:bg-background/50 border border-slate-300 dark:border-white/10 rounded-lg py-2 pl-10 pr-4 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-primary-blue focus:shadow-[0_0_10px_rgba(37,99,235,0.1)] dark:focus:shadow-[0_0_10px_rgba(37,99,235,0.3)] transition-all resize-none"
+                                    className="w-full bg-[#F7F1EB] border border-[#E8DFD8] rounded-lg py-2.5 pl-10 pr-4 text-[#211C1D] placeholder:text-[#70676A]/50 focus:outline-none focus:border-[#7A1822] focus:ring-1 focus:ring-[#7A1822] transition-all resize-none font-grotesk"
                                     placeholder="Leave your message..."
                                     required
                                 />
                             </div>
                         </div>
 
+                        {/* Primary CTA Button: Primary Burgundy fill, Cream text */}
                         <button
                             type="submit"
                             disabled={status === 'submitting' || status === 'submitted'}
-                            className={`w-full group relative overflow-hidden font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(37, 99, 235,0.2)] hover:shadow-[0_0_30px_rgba(37, 99, 235,0.4)] flex items-center justify-center gap-2
-                                ${status === 'submitted' ? 'bg-primary-teal/20 border-primary-teal text-primary-teal' :
-                                    status === 'error' ? 'bg-red-500/20 border-red-500 text-red-500' :
-                                        'bg-primary-blue/10 hover:bg-primary-blue/20 border border-primary-blue text-primary-blue'}`}
+                            className={`w-full group relative overflow-hidden font-bold py-3.5 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm font-code
+                                ${status === 'submitted' ? 'bg-[#E7C9C7] border border-[#E8DFD8] text-[#7A1822]' :
+                                    status === 'error' ? 'bg-red-500/20 border border-red-500 text-red-500' :
+                                        'bg-[#7A1822] hover:bg-[#5A1018] text-[#F7F1EB] shadow-md hover:shadow-lg'}`}
                         >
                             <AnimatePresence mode="wait">
                                 {status === 'submitting' ? (
@@ -182,12 +187,11 @@ const DataCollector = () => {
                                         key="idle"
                                         className="flex items-center gap-2"
                                     >
-                                        SEND <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                                        SEND <Send size={16} className="group-hover:translate-x-1 transition-transform" />
                                     </motion.div>
                                 )}
                             </AnimatePresence>
                         </button>
-
                     </form>
                 </motion.div>
             </div>

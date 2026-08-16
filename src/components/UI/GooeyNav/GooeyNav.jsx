@@ -100,15 +100,20 @@ const GooeyNav = ({
     if (href.startsWith('#')) {
       e.preventDefault();
       const targetId = href.replace('#', '');
-      const element = document.getElementById(targetId);
-      if (element) {
-          const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.scrollY - offset;
-          window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth"
-          });
+      if (targetId === 'home') {
+        // HOME always returns to very top of page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const element = document.getElementById(targetId);
+        if (element) {
+            const offset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - offset;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
       }
     }
 

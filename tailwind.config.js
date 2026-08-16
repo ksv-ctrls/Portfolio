@@ -4,50 +4,46 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        background: '#020817', // Saturated Deep Blue
-        'background-alt': '#051a3d', // Deeper Navy
-        'background-subtle': '#1e1b4b', // Subtle Violet
-        primary: {
-          indigo: '#4f46e5', // Indigo 600
-          violet: '#7c3aed', // Violet 600
-          blue: '#2563eb', // Blue 600
-        },
-        glow: {
-          teal: '#2dd4bf',
-          green: '#10b981',
-          blue: '#2563eb',
-        }
+        // ── Main Canvas & Surfaces ─────────────────────────
+        cream:          '#F7F1EB',
+        background:     '#F7F1EB',
+        'warm-white':   '#FCF9F5',
+        surface:        '#FCF9F5',
+        'soft-rose':    '#F0DCD9',
+        'soft-blue':    '#D9E4EF',
+        border:         '#E8DFD8',
+
+        // ── Primary Burgundy Identity ──────────────────────
+        burgundy:       '#7A1822',
+        'deep-burgundy':'#5A1018',
+        'dark-text':    '#211C1D',
+        foreground:     '#211C1D',
+        'muted-text':   '#70676A',
+
+        // ── Secondary Colors ───────────────────────────────
+        plum:           '#24112F', // Dark Plum / Deep Purple
+        'dusty-rose':   '#E7C9C7', // Dusty Rose
+        lavender:       '#C9B8D8', // Lavender
+        'muted-blue':   '#9BB6D3', // Muted Blue
+        gold:           '#D5B36A', // Warm Gold Highlight
       },
       fontFamily: {
         'grotesk': ['"Space Grotesk"', 'sans-serif'],
-        'outfit': ['"Space Grotesk"', 'sans-serif'],
-        'code': ['"Source Code Pro"', 'monospace'],
+        'code':    ['"Source Code Pro"', 'monospace'],
       },
-      animation: {
-        'spin-slow': 'spin 3s linear infinite',
-        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'aurora': 'aurora 60s linear infinite',
-      },
-      keyframes: {
-        'pulse-glow': {
-          '0%, 100%': { opacity: 1, boxShadow: '0 0 20px #22d3ee' },
-          '50%': { opacity: .5, boxShadow: '0 0 10px #9333ea' },
-        },
-        'aurora': {
-          from: { backgroundPosition: "50% 50%, 50% 50%" },
-          to: { backgroundPosition: "350% 50%, 350% 50%" },
-        }
+      boxShadow: {
+        'card-soft':    '0 10px 30px rgba(33, 28, 29, 0.06), 0 2px 8px rgba(122, 24, 34, 0.03)',
+        'card-elevated':'0 16px 40px rgba(33, 28, 29, 0.12), 0 4px 12px rgba(90, 16, 24, 0.06)',
+        'contact-depth':'0 24px 60px rgba(33, 28, 29, 0.14), 0 8px 24px rgba(90, 16, 24, 0.08)',
       }
     },
   },
   plugins: [addVariablesForColors],
 }
 
-// This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
 import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
 
 function addVariablesForColors({ addBase, theme }) {

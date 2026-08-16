@@ -1,220 +1,216 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiGithub, FiArrowUpRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Carousel.css';
-
-const DRAG_BUFFER = 0;
-const VELOCITY_THRESHOLD = 500;
-const GAP = 16;
-const SPRING_OPTIONS = { type: 'spring', stiffness: 300, damping: 30 };
-
-function CarouselItem({ item, index, itemWidth, round, trackItemOffset, x, transition }) {
-    const range = [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset];
-    const outputRange = [90, 0, -90];
-    const rotateY = useTransform(x, range, outputRange, { clamp: false });
-    const isWide = itemWidth > 500;
-
-    return (
-        <motion.div
-            key={`${item?.id ?? index}-${index}`}
-            className={`carousel-item ${round ? 'round' : ''} ${isWide ? 'wide-layout' : ''}`}
-            style={{
-                width: itemWidth,
-                height: round ? itemWidth : '100%',
-                rotateY: rotateY,
-                ...(round && { borderRadius: '50%' })
-            }}
-            transition={transition}
-        >
-            <div className={`carousel-item-header ${round ? 'round' : ''}`}>
-                <span className="carousel-icon-container">{item.icon}</span>
-            </div>
-            <div className="carousel-item-content">
-                <div className="carousel-item-category">{item.category}</div>
-                <div className="carousel-item-title">{item.title}</div>
-                <p className="carousel-item-description">{item.description}</p>
-                {item.details && (
-                    <ul className="carousel-item-details">
-                        {item.details.map((detail, i) => (
-                            <li key={i}>{detail}</li>
-                        ))}
-                    </ul>
-                )}
-                {item.tech && (
-                    <div className="carousel-item-tech">
-                        {item.tech.map((t, i) => (
-                            <span key={i} className="carousel-tech-tag">{t}</span>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </motion.div>
-    );
-}
 
 export default function Carousel({
     items = [],
-    baseWidth = 300,
+    activeIndex = 0,
+    setActiveIndex,
     autoplay = false,
-    autoplayDelay = 3000,
-    pauseOnHover = false,
-    loop = false,
-    round = false
+    autoplayDelay = 4000,
+    pauseOnHover = true
 }) {
-    const containerPadding = 16;
-    const itemWidth = baseWidth - containerPadding * 2;
-    const trackItemOffset = itemWidth + GAP;
-
-    const itemsForRender = useMemo(() => {
-        if (!loop) return items;
-        if (items.length === 0) return [];
-        return [items[items.length - 1], ...items, items[0]];
-    }, [items, loop]);
-
-    const [position, setPosition] = useState(loop ? 1 : 0);
-    const x = useMotionValue(0);
     const [isHovered, setIsHovered] = useState(false);
-    const [isJumping, setIsJumping] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false);
     const containerRef = useRef(null);
 
-    useEffect(() => {
-        if (pauseOnHover && containerRef.current) {
-            const container = containerRef.current;
-            const handleMouseEnter = () => setIsHovered(true);
-            const handleMouseLeave = () => setIsHovered(false);
-            container.addEventListener('mouseenter', handleMouseEnter);
-            container.addEventListener('mouseleave', handleMouseLeave);
-            return () => {
-                container.removeEventListener('mouseenter', handleMouseEnter);
-                container.removeEventListener('mouseleave', handleMouseLeave);
-            };
+    const handleNext = () => {
+        if (setActiveIndex) {
+            setActiveIndex((prev) => (prev + 1) % items.length);
         }
-    }, [pauseOnHover]);
+    };
 
+    const handlePrev = () => {
+        if (setActiveIndex) {
+            setActiveIndex((prev) => (prev - 1 + items.length) % items.length);
+        }
+    };
+
+    // Autoplay Timer (Only if enabled)
     useEffect(() => {
-        if (!autoplay || itemsForRender.length <= 1) return;
+        if (!autoplay || items.length <= 1) return;
         if (pauseOnHover && isHovered) return;
+
         const timer = setInterval(() => {
-            setPosition(prev => Math.min(prev + 1, itemsForRender.length - 1));
+            handleNext();
         }, autoplayDelay);
+
         return () => clearInterval(timer);
-    }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length]);
+    }, [autoplay, autoplayDelay, isHovered, pauseOnHover, items.length]);
 
-    useEffect(() => {
-        const startingPosition = loop ? 1 : 0;
-        setPosition(startingPosition);
-        x.set(-startingPosition * trackItemOffset);
-    }, [items.length, loop, trackItemOffset, x]);
+    // Trackpad / Wheel Handler with debounce to prevent accidental fast skipping
+    const lastWheelTime = useRef(0);
+    const handleWheel = (e) => {
+        const now = Date.now();
+        if (now - lastWheelTime.current < 400) return;
 
-    useEffect(() => {
-        if (!loop && position > itemsForRender.length - 1) {
-            setPosition(Math.max(0, itemsForRender.length - 1));
-        }
-    }, [itemsForRender.length, loop, position]);
-
-    const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS;
-
-    const handleAnimationStart = () => setIsAnimating(true);
-
-    const handleAnimationComplete = () => {
-        if (!loop || itemsForRender.length <= 1) { setIsAnimating(false); return; }
-        const lastCloneIndex = itemsForRender.length - 1;
-        if (position === lastCloneIndex) {
-            setIsJumping(true);
-            const target = 1;
-            setPosition(target);
-            x.set(-target * trackItemOffset);
-            requestAnimationFrame(() => { setIsJumping(false); setIsAnimating(false); });
-            return;
-        }
-        if (position === 0) {
-            setIsJumping(true);
-            const target = items.length;
-            setPosition(target);
-            x.set(-target * trackItemOffset);
-            requestAnimationFrame(() => { setIsJumping(false); setIsAnimating(false); });
-            return;
-        }
-        setIsAnimating(false);
-    };
-
-    const handleDragEnd = (_, info) => {
-        const { offset, velocity } = info;
-        const direction =
-            offset.x < -DRAG_BUFFER || velocity.x < -VELOCITY_THRESHOLD ? 1
-                : offset.x > DRAG_BUFFER || velocity.x > VELOCITY_THRESHOLD ? -1
-                    : 0;
-        if (direction === 0) return;
-        setPosition(prev => {
-            const next = prev + direction;
-            const max = itemsForRender.length - 1;
-            return Math.max(0, Math.min(next, max));
-        });
-    };
-
-    const dragProps = loop ? {} : {
-        dragConstraints: {
-            left: -trackItemOffset * Math.max(itemsForRender.length - 1, 0),
-            right: 0
+        if (Math.abs(e.deltaY) > 25 || Math.abs(e.deltaX) > 25) {
+            if (e.deltaY > 0 || e.deltaX > 0) {
+                handleNext();
+            } else {
+                handlePrev();
+            }
+            lastWheelTime.current = now;
         }
     };
-
-    const activeIndex =
-        items.length === 0 ? 0
-            : loop ? (position - 1 + items.length) % items.length
-                : Math.min(position, items.length - 1);
 
     return (
-        <div
+        <div 
             ref={containerRef}
-            className={`carousel-container ${round ? 'round' : ''}`}
-            style={{
-                width: `${baseWidth}px`,
-                ...(round && { height: `${baseWidth}px`, borderRadius: '50%' })
-            }}
+            className="depth-carousel-wrapper"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onWheel={handleWheel}
         >
-            <motion.div
-                className="carousel-track"
-                drag={isAnimating ? false : 'x'}
-                {...dragProps}
-                style={{
-                    width: itemWidth,
-                    gap: `${GAP}px`,
-                    perspective: 1000,
-                    perspectiveOrigin: `${position * trackItemOffset + itemWidth / 2}px 50%`,
-                    x
-                }}
-                onDragEnd={handleDragEnd}
-                animate={{ x: -(position * trackItemOffset) }}
-                transition={effectiveTransition}
-                onAnimationStart={handleAnimationStart}
-                onAnimationComplete={handleAnimationComplete}
+            {/* 3D Depth Stage */}
+            <div className="depth-stage">
+                <AnimatePresence initial={false}>
+                    {items.map((item, index) => {
+                        // Calculate offset distance relative to current activeIndex
+                        let offset = index - activeIndex;
+
+                        // Wrap index for circular loop calculation
+                        if (offset < -Math.floor(items.length / 2)) {
+                            offset += items.length;
+                        } else if (offset > Math.floor(items.length / 2)) {
+                            offset -= items.length;
+                        }
+
+                        // Visibility window (-2 to +2)
+                        const absOffset = Math.abs(offset);
+                        if (absOffset > 2) return null;
+
+                        const numString = String(item.id || index + 1).padStart(2, '0');
+                        const githubUrl = item.github || 'https://github.com/ksv-ctrls';
+                        const accentColor = item.accentColor || '#7A1822';
+                        const cardBg = item.cardBg || '#FCF9F5';
+                        const textColor = item.textColor || '#211C1D';
+
+                        // Authentic 3D Depth Transformations
+                        const translateX = offset * 270; // Lateral spread
+                        const translateZ = -absOffset * 190; // Depth Z-axis displacement
+                        const rotateY = offset * -26; // Tilt angle
+                        const scale = 1 - absOffset * 0.14; // Scale falloff
+                        const opacity = 1 - absOffset * 0.35; // Brightness / Blur opacity falloff
+                        const zIndex = 10 - absOffset; // Layer stacking
+
+                        return (
+                            <motion.div
+                                key={item.id || index}
+                                className={`depth-card-item ${offset === 0 ? 'is-active' : ''}`}
+                                initial={false}
+                                animate={{
+                                    x: translateX,
+                                    z: translateZ,
+                                    rotateY: rotateY,
+                                    scale: scale,
+                                    opacity: opacity,
+                                }}
+                                transition={{
+                                    type: 'spring',
+                                    stiffness: 260,
+                                    damping: 28,
+                                }}
+                                style={{
+                                    zIndex: zIndex,
+                                    transformStyle: 'preserve-3d',
+                                    backgroundColor: cardBg,
+                                    color: textColor,
+                                    borderColor: offset === 0 ? accentColor : '#E8DFD8'
+                                }}
+                                onClick={() => setActiveIndex && setActiveIndex(index)}
+                            >
+                                {/* Header Stamp */}
+                                <div className="depth-card-header">
+                                    <span className="depth-num" style={{ color: accentColor }}>{numString}</span>
+                                    <span 
+                                        className="depth-category" 
+                                        style={{ 
+                                            backgroundColor: `${accentColor}18`, 
+                                            color: accentColor, 
+                                            borderColor: `${accentColor}40` 
+                                        }}
+                                    >
+                                        {item.category}
+                                    </span>
+                                </div>
+
+                                {/* Content Body */}
+                                <div className="depth-card-body">
+                                    <h3 className="depth-title" style={{ color: textColor }}>{item.title}</h3>
+                                    <p className="depth-description">{item.description}</p>
+
+                                    {item.details && (
+                                        <ul className="depth-details">
+                                            {item.details.map((detail, dIdx) => (
+                                                <li key={dIdx}>{detail}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                {/* Card Footer & GitHub Primary Link */}
+                                <div className="depth-card-footer" style={{ borderColor: `${accentColor}30` }}>
+                                    <div className="depth-tech-stack">
+                                        {item.tech?.map((t, tIdx) => (
+                                            <span 
+                                                key={tIdx} 
+                                                className="depth-tech-pill"
+                                                style={{ backgroundColor: `${accentColor}10`, borderColor: `${accentColor}30`, color: textColor }}
+                                            >
+                                                {t}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <a
+                                        href={githubUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="depth-github-btn group"
+                                        style={{ backgroundColor: accentColor, color: '#FCF9F5' }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <FiGithub size={16} />
+                                        <span>View GitHub →</span>
+                                        <FiArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                    </a>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button 
+                onClick={handlePrev} 
+                className="depth-nav-btn prev-btn" 
+                aria-label="Previous Project"
             >
-                {itemsForRender.map((item, index) => (
-                    <CarouselItem
-                        key={`${item?.id ?? index}-${index}`}
-                        item={item}
-                        index={index}
-                        itemWidth={itemWidth}
-                        round={round}
-                        trackItemOffset={trackItemOffset}
-                        x={x}
-                        transition={effectiveTransition}
+                <FiChevronLeft size={22} />
+            </button>
+            <button 
+                onClick={handleNext} 
+                className="depth-nav-btn next-btn" 
+                aria-label="Next Project"
+            >
+                <FiChevronRight size={22} />
+            </button>
+
+            {/* Dot Indicators */}
+            <div className="depth-indicators">
+                {items.map((item, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setActiveIndex && setActiveIndex(idx)}
+                        className={`depth-dot ${activeIndex === idx ? 'active' : ''}`}
+                        style={{
+                            backgroundColor: activeIndex === idx ? (items[idx]?.accentColor || '#7A1822') : '#E8DFD8'
+                        }}
+                        aria-label={`Go to project ${idx + 1}`}
                     />
                 ))}
-            </motion.div>
-            <div className={`carousel-indicators-container ${round ? 'round' : ''}`}>
-                <div className="carousel-indicators">
-                    {items.map((_, index) => (
-                        <motion.div
-                            key={index}
-                            className={`carousel-indicator ${activeIndex === index ? 'active' : 'inactive'}`}
-                            animate={{ scale: activeIndex === index ? 1.2 : 1 }}
-                            onClick={() => setPosition(loop ? index + 1 : index)}
-                            transition={{ duration: 0.15 }}
-                        />
-                    ))}
-                </div>
             </div>
         </div>
     );

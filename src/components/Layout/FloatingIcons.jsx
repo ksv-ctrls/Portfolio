@@ -4,21 +4,20 @@ import { Code2, Cpu, Terminal, Layers, Database, Atom, Globe, Lock, Workflow } f
 
 const FloatingIcons = () => {
     const icons = [
-        { Icon: Code2, color: 'text-primary-blue/10', size: 24 },
-        { Icon: Terminal, color: 'text-primary-indigo/10', size: 20 },
-        { Icon: Cpu, color: 'text-primary-blue/10', size: 28 },
-        { Icon: Layers, color: 'text-primary-indigo/10', size: 22 },
-        { Icon: Database, color: 'text-primary-blue/10', size: 20 },
-        { Icon: Atom, color: 'text-primary-indigo/10', size: 26 },
-        { Icon: Globe, color: 'text-primary-blue/10', size: 24 },
-        { Icon: Lock, color: 'text-primary-indigo/10', size: 18 },
-        { Icon: Workflow, color: 'text-primary-blue/10', size: 22 },
-        { Icon: Code2, color: 'text-primary-indigo/10', size: 20 },
-        { Icon: Terminal, color: 'text-primary-blue/10', size: 24 },
-        { Icon: Cpu, color: 'text-primary-indigo/10', size: 22 },
+        { Icon: Code2, color: 'text-[#7A1722]/12', size: 24 },
+        { Icon: Terminal, color: 'text-[#6F6868]/15', size: 20 },
+        { Icon: Cpu, color: 'text-[#7A1722]/12', size: 28 },
+        { Icon: Layers, color: 'text-[#8EABC8]/20', size: 22 },
+        { Icon: Database, color: 'text-[#24113F]/15', size: 20 },
+        { Icon: Atom, color: 'text-[#8EABC8]/20', size: 26 },
+        { Icon: Globe, color: 'text-[#7A1722]/12', size: 24 },
+        { Icon: Lock, color: 'text-[#6F6868]/15', size: 18 },
+        { Icon: Workflow, color: 'text-[#D2AF6D]/20', size: 22 },
+        { Icon: Code2, color: 'text-[#6F6868]/15', size: 20 },
+        { Icon: Terminal, color: 'text-[#7A1722]/12', size: 24 },
+        { Icon: Cpu, color: 'text-[#6F6868]/15', size: 22 },
     ];
 
-    // Fixed random positions so they don't jump on re-render
     const positions = [
         { top: '10%', left: '15%' },
         { top: '25%', right: '10%' },
@@ -38,7 +37,6 @@ const FloatingIcons = () => {
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             {icons.map((item, index) => {
                 const pos = positions[index];
-                // Hide every 3rd icon on mobile for less clutter
                 const mobileHide = index % 3 === 0 ? 'hidden md:block' : 'block';
 
                 return (

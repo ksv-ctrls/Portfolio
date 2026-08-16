@@ -1,97 +1,631 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Briefcase, GraduationCap, Code } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * Each experience item carries:
+ *   accentColor  — primary brand accent for this role
+ *   darkAccent   — deeper shade for hover border
+ *   hoverShadow  — coloured shadow for the card
+ *   badgeStyle   — responsibility tag colours
+ */
 const experience = [
     {
-        year: 'Feb 2026 - May 2026',
-        role: 'Technical Product Evangelist Intern',
-        company: 'Odyssey Technologies',
-        description: 'Conducted client demos, closed implementations for Scope Global School and BCS & Co, and led trials for Techfruits.',
-        type: 'Intern',
-        icon: <Code size={20} />
+        year: 'Feb 2026 – May 2026',
+        role: 'Product Intern - Cybersecurity',
+        company: 'Odyssey Technologies, Chennai',
+        description:
+            'xorkeeSign – DSC-Based Email Security: Tested 15+ security workflows, identified 20+ critical defects, and reduced defect escapes by 30%, accelerating release by 2 weeks.',
+        responsibilities: [
+            'Email Security',
+            'Test Sprints',
+            'Agile Sprints',
+            'Stakeholder Demos'
+        ],
+        accentColor: '#7A1822',
+        darkAccent: '#5A1018',
+        hoverShadow:
+            '0 22px 55px rgba(122,24,34,0.38), 0 8px 22px rgba(122,24,34,0.22)',
+        badgeBg: '#F0DCD9',
+        badgeText: '#7A1822',
+        badgeBorder: '#E7C9C7',
     },
+
     {
-        year: 'Mar 2024 - Jan 2026',
-        role: 'Part-time Faculty (Software)',
+        year: 'Dec 2025 – Present',
+        role: 'Founder & Full-Stack Developer',
+        company: 'ZeroLag StudioZ',
+        description:
+            'ZeroLag Studioz: Founded and operate a freelance studio, delivering 10+ production MERN apps with CI/CD and Docker, serving 5 repeat clients.',
+        responsibilities: [
+            'System Design',
+            'MERN Stack',
+            'CI/CD Pipelines',
+            'Cloud Deployment'
+        ],
+        accentColor: '#D5B36A',
+        darkAccent: '#B8954C',
+        hoverShadow:
+            '0 22px 55px rgba(213,179,106,0.38), 0 8px 22px rgba(184,149,76,0.22)',
+        badgeBg: '#FCF9F5',
+        badgeText: '#8A6E28',
+        badgeBorder: '#D5B36A',
+    },
+
+    {
+        year: 'Mar 2024 – Jan 2026',
+        role: 'Technical Instructor - Programming & Full-Stack Development',
         company: 'Apollo Computer Education',
-        description: 'Trained 50+ students in programming fundamentals and advanced development concepts (C, C++, Python, Java, SQL, MERN).',
-        type: 'work',
-        icon: <Brain size={20} />
+        description:
+            'Designed a project based software engineering curriculum and taught 75+ learners across Python, Java, C/C++, SQL, DSA, APIs, and Full-Stack Development.',
+        responsibilities: [
+            'Curriculum Design',
+            'Full-Stack Training',
+            'DSA & System Design',
+            'Student Mentoring'
+        ],
+        accentColor: '#6C8DAE',
+        darkAccent: '#4E7393',
+        hoverShadow:
+            '0 22px 55px rgba(108,141,174,0.38), 0 8px 22px rgba(108,141,174,0.22)',
+        badgeBg: '#D9E4EF',
+        badgeText: '#211C1D',
+        badgeBorder: 'rgba(155,182,211,0.5)',
     },
+
     {
-        year: 'Nov 2023 - Jan 2024',
-        role: 'Website Manager / Part-time Employee',
-        company: 'Octopus Consulting Services',
-        description: 'Managed website content, improved SEO, handled social media platforms, and generated leads via multiple channels.',
-        type: 'work',
-        icon: <Briefcase size={20} />
+        year: 'Nov 2023 – Feb 2024',
+        role: 'Website Developer',
+        company: 'Octopus Consulting Services, Chennai',
+        description:
+            'Developed a responsive MERN website with REST APIs, CMS, and SEO, using Google Analytics to optimize 3 high-bounce pages and improve user engagement.',
+        responsibilities: [
+            'MERN Stack',
+            'CMS Integration',
+            'SEO Optimization',
+            'Google Analytics'
+        ],
+        accentColor: '#24112F',
+        darkAccent: '#1A0B24',
+        hoverShadow:
+            '0 22px 55px rgba(36,17,47,0.38), 0 8px 22px rgba(36,17,47,0.22)',
+        badgeBg: '#C9B8D8',
+        badgeText: '#24112F',
+        badgeBorder: 'rgba(201,184,216,0.7)',
     },
 ];
 
-import { Brain } from 'lucide-react'; // Import missing icon
 
-const TimelineItem = ({ item, index }) => (
-    <motion.div
-        initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        className={`relative flex items-center justify-between w-full mb-12 md:mb-8 flex-col md:flex-row ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-    >
-        {/* Connection Link for Desktop */}
-        <div className="hidden md:block order-1 w-5/12" />
+/* ============================================================
+   INDIVIDUAL TIMELINE CARD
+   Typography intentionally matched closer to ProjectCard
+============================================================ */
 
-        {/* Timeline Dot */}
-        <div className="hidden md:flex z-20 items-center md:order-1 bg-white dark:bg-background border-2 border-primary-blue rounded-full w-10 h-10 justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] md:relative md:left-auto md:translate-x-0">
-            <span className="text-primary-blue">{item.icon}</span>
-        </div>
+const TimelineCard = ({ item, isLeft }) => {
+    const [hovered, setHovered] = useState(false);
 
-        {/* Card Content */}
-        <div className={`md:order-1 w-full md:w-5/12 ml-0 rounded-2xl bg-white dark:bg-black/40 backdrop-blur-xl p-6 border border-slate-200 dark:border-white/10 border-l-4 ${item.type === 'work' ? 'border-l-primary-violet' : 'border-l-primary-indigo'} shadow-[0_0_30px_rgba(99,102,241,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(99,102,241,0.4)] dark:hover:shadow-none hover:-translate-y-1 transition-all duration-300`}>
-            <h3 className="font-bold text-lg md:text-xl text-slate-800 dark:text-white">{item.role}</h3>
-            <h4 className="font-code text-xs md:text-sm text-primary-blue mb-2">{item.company}</h4>
-            <span className="text-[10px] md:text-xs text-slate-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 px-2 py-1 rounded inline-block mb-3">{item.year}</span>
-            <p className="text-slate-600 dark:text-gray-300 text-sm leading-relaxed">{item.description}</p>
-        </div>
-    </motion.div>
-);
-
-const Timeline = () => {
     return (
-        <section id="experience" className="min-h-screen py-20 px-4 relative overflow-hidden">
-            {/* Background Particles (Simplified) */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-                {[...Array(20)].map((_, i) => (
-                    <div key={i} className="absolute bg-white rounded-full w-1 h-1" style={{
-                        top: `${Math.random() * 100}%`,
-                        left: `${Math.random() * 100}%`,
-                    }} />
+        <div
+            className="
+                timeline-card
+                rounded-xl
+                bg-[#FCF9F5]
+                p-5
+                md:p-6
+            "
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{
+                border: `1.5px solid ${hovered
+                        ? item.darkAccent
+                        : `${item.accentColor}55`
+                    }`,
+
+                boxShadow: hovered
+                    ? item.hoverShadow
+                    : '0 6px 20px rgba(33,28,29,0.06)',
+
+                transform: hovered
+                    ? 'translateY(-5px) scale(1.012)'
+                    : 'translateY(0) scale(1)',
+
+                transition:
+                    'border-color 300ms ease, box-shadow 300ms ease, transform 300ms cubic-bezier(0.25,1,0.5,1)',
+            }}
+        >
+
+            {/* =================================================
+                DATE
+            ================================================= */}
+            <span
+                className="
+                    inline-block
+                    text-[10px]
+                    font-code
+                    font-bold
+                    tracking-wider
+                    uppercase
+                    mb-2.5
+                    px-2
+                    py-1
+                    rounded-md
+                    border
+                "
+                style={{
+                    backgroundColor: `${item.accentColor}12`,
+                    borderColor: `${item.accentColor}45`,
+                    color: item.accentColor,
+                }}
+            >
+                {item.year}
+            </span>
+
+
+            {/* =================================================
+                ROLE
+            ================================================= */}
+            <h3
+                className="
+                    font-bold
+                    text-lg
+                    md:text-[18px]
+                    leading-tight
+                    text-[#211C1D]
+                    mb-1.5
+                "
+            >
+                {item.role}
+            </h3>
+
+
+            {/* =================================================
+                COMPANY
+            ================================================= */}
+            <p
+                className="
+                    font-code
+                    text-xs
+                    font-bold
+                    mb-3
+                    leading-relaxed
+                "
+                style={{
+                    color: item.accentColor,
+                }}
+            >
+                {item.company}
+            </p>
+
+
+            {/* =================================================
+                DESCRIPTION
+            ================================================= */}
+            <p
+                className="
+                    text-[#70676A]
+                    text-xs
+                    leading-relaxed
+                    mb-4
+                "
+            >
+                {item.description}
+            </p>
+
+
+            {/* =================================================
+                RESPONSIBILITY TAGS
+            ================================================= */}
+            <div
+                className={`
+                    flex
+                    flex-wrap
+                    gap-1.5
+                    pt-3
+                    border-t
+                    border-[#E8DFD8]
+
+                    ${isLeft
+                        ? 'md:justify-end'
+                        : 'md:justify-start'
+                    }
+                `}
+            >
+                {item.responsibilities.map((resp, rIdx) => (
+                    <span
+                        key={rIdx}
+                        className="
+                            text-[10px]
+                            font-code
+                            px-2
+                            py-1
+                            rounded-md
+                            font-semibold
+                            border
+                            leading-none
+                        "
+                        style={{
+                            backgroundColor: item.badgeBg,
+                            color: item.badgeText,
+                            borderColor: item.badgeBorder,
+                        }}
+                    >
+                        {resp}
+                    </span>
                 ))}
             </div>
 
-            <div className="max-w-5xl mx-auto relative">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
+        </div>
+    );
+};
+
+
+/* ============================================================
+   TIMELINE
+============================================================ */
+
+const Timeline = () => {
+    const sectionRef = useRef(null);
+    const lineRef = useRef(null);
+    const itemsRef = useRef([]);
+
+    useEffect(() => {
+        const prefersReducedMotion = window
+            .matchMedia('(prefers-reduced-motion: reduce)')
+            .matches;
+
+        if (prefersReducedMotion) return;
+
+        const ctx = gsap.context(() => {
+
+            /* =================================================
+               PROGRESSIVE SPINE REVEAL
+            ================================================= */
+
+            if (lineRef.current) {
+                gsap.fromTo(
+                    lineRef.current,
+                    {
+                        scaleY: 0,
+                    },
+                    {
+                        scaleY: 1,
+                        transformOrigin: 'top center',
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: sectionRef.current,
+                            start: 'top 65%',
+                            end: 'bottom 80%',
+                            scrub: 0.6,
+                        },
+                    }
+                );
+            }
+
+
+            /* =================================================
+               CARD + DOT ANIMATIONS
+            ================================================= */
+
+            itemsRef.current.forEach((item, index) => {
+
+                if (!item) return;
+
+                const card =
+                    item.querySelector('.timeline-card');
+
+                const dot =
+                    item.querySelector('.timeline-dot');
+
+                const isLeft = index % 2 === 0;
+
+
+                /* DOT */
+
+                if (dot) {
+                    gsap.fromTo(
+                        dot,
+                        {
+                            scale: 0,
+                            opacity: 0,
+                        },
+                        {
+                            scale: 1,
+                            opacity: 1,
+                            duration: 0.45,
+                            ease: 'back.out(1.7)',
+                            scrollTrigger: {
+                                trigger: item,
+                                start: 'top 88%',
+                                toggleActions:
+                                    'play none none reverse',
+                            },
+                        }
+                    );
+                }
+
+
+                /* CARD */
+
+                if (card) {
+                    gsap.fromTo(
+                        card,
+                        {
+                            x: isLeft ? -52 : 52,
+                            opacity: 0,
+                        },
+                        {
+                            x: 0,
+                            opacity: 1,
+                            duration: 0.75,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: item,
+                                start: 'top 88%',
+                                toggleActions:
+                                    'play none none reverse',
+                            },
+                        }
+                    );
+                }
+
+            });
+
+        }, sectionRef);
+
+        return () => ctx.revert();
+
+    }, []);
+
+
+    return (
+        <section
+            id="experience"
+            ref={sectionRef}
+            className="
+                py-20
+                px-4
+                relative
+                overflow-visible
+            "
+        >
+
+            <div
+                className="
+                    max-w-5xl
+                    mx-auto
+                    relative
+                "
+            >
+
+                {/* =================================================
+                    SECTION HEADER
+                ================================================= */}
+
+                <div
+                    className="
+                        text-center
+                        mb-14
+                    "
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-blue to-primary-violet">
+
+                    <span
+                        className="
+                            text-xs
+                            font-code
+                            tracking-widest
+                            text-[#7A1822]
+                            uppercase
+                            font-bold
+                        "
+                    >
+                        CAREER JOURNEY
+                    </span>
+
+                    <h2
+                        className="
+                            text-3xl
+                            md:text-4xl
+                            font-bold
+                            text-[#211C1D]
+                            tracking-tight
+                            mt-2
+                        "
+                    >
                         Experience
                     </h2>
-                    <div className="h-1 w-24 bg-gradient-to-r from-primary-blue to-primary-violet mx-auto mt-4 rounded-full" />
-                </motion.div>
 
-                {/* Vertical Line - Positioned left on mobile, center on desktop */}
-                <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary-blue/40 via-primary-violet/40 to-transparent dark:from-white/10 dark:via-white/10 dark:to-transparent rounded-full" />
+                    <div
+                        className="
+                            h-1
+                            w-16
+                            bg-[#7A1822]
+                            mx-auto
+                            mt-4
+                            rounded-full
+                        "
+                    />
+
+                </div>
+
+
+                {/* =================================================
+                    ALTERNATING TIMELINE
+                ================================================= */}
 
                 <div className="relative">
-                    {experience.map((item, index) => (
-                        <TimelineItem key={index} item={item} index={index} />
-                    ))}
+
+                    {/* =================================================
+                        DESKTOP CENTER SPINE
+                    ================================================= */}
+
+                    <div
+                        className="
+                            hidden
+                            md:block
+                            absolute
+                            left-1/2
+                            top-0
+                            bottom-0
+                            -translate-x-1/2
+                            w-0.5
+                            bg-[#E8DFD8]
+                        "
+                    >
+
+                        <div
+                            ref={lineRef}
+                            className="
+                                w-full
+                                h-full
+                                bg-[#7A1822]
+                                origin-top
+                            "
+                        />
+
+                    </div>
+
+
+                    {/* =================================================
+                        MOBILE SPINE
+                    ================================================= */}
+
+                    <div
+                        className="
+                            md:hidden
+                            absolute
+                            left-4
+                            top-0
+                            bottom-0
+                            w-0.5
+                            bg-[#7A1822]/25
+                        "
+                    />
+
+
+                    {/* =================================================
+                        EXPERIENCE ITEMS
+                    ================================================= */}
+
+                    <div
+                        className="
+                            space-y-10
+                            md:space-y-12
+                        "
+                    >
+
+                        {experience.map((item, index) => {
+
+                            const isLeft =
+                                index % 2 === 0;
+
+                            return (
+
+                                <div
+                                    key={index}
+                                    ref={(el) =>
+                                        (itemsRef.current[index] = el)
+                                    }
+                                    className={`
+                                        relative
+                                        flex
+                                        items-start
+                                        w-full
+
+                                        ${isLeft
+                                            ? 'md:flex-row'
+                                            : 'md:flex-row-reverse'
+                                        }
+
+                                        flex-col
+                                    `}
+                                >
+
+                                    {/* =================================================
+                                        CARD SIDE
+                                    ================================================= */}
+
+                                    <div
+                                        className={`
+                                            w-full
+                                            md:w-5/12
+                                            pl-12
+                                            md:pl-0
+
+                                            ${isLeft
+                                                ? 'md:pr-8 md:text-right'
+                                                : 'md:pl-8 md:text-left'
+                                            }
+                                        `}
+                                    >
+
+                                        <TimelineCard
+                                            item={item}
+                                            isLeft={isLeft}
+                                        />
+
+                                    </div>
+
+
+                                    {/* =================================================
+                                        CENTER DOT
+                                    ================================================= */}
+
+                                    <div
+                                        className="
+                                            absolute
+                                            left-4
+                                            md:left-1/2
+                                            top-7
+                                            md:-translate-x-1/2
+                                            z-10
+                                        "
+                                    >
+
+                                        <div
+                                            className="
+                                                timeline-dot
+                                                w-4
+                                                h-4
+                                                rounded-full
+                                                border-[3px]
+                                                border-[#F7F1EB]
+                                                shadow-md
+                                            "
+                                            style={{
+                                                backgroundColor:
+                                                    item.accentColor,
+                                            }}
+                                        />
+
+                                    </div>
+
+
+                                    {/* =================================================
+                                        OPPOSITE SIDE SPACER
+                                    ================================================= */}
+
+                                    <div
+                                        className="
+                                            hidden
+                                            md:block
+                                            w-5/12
+                                        "
+                                    />
+
+                                </div>
+
+                            );
+
+                        })}
+
+                    </div>
+
                 </div>
+
             </div>
+
         </section>
     );
 };

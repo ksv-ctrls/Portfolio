@@ -10,25 +10,14 @@ import Achievements from './components/Achievements/Achievements';
 import ContactInfo from './components/Contact/ContactInfo';
 import DataCollector from './components/Contact/DataCollector';
 
-import Welcome from './components/Welcome/Welcome';
-import { ContainerScroll } from './components/UI/container-scroll-animation';
-
 function App() {
   return (
-    <AuroraBackground className="text-slate-900 dark:text-white selection:bg-primary-blue selection:text-background">
+    <AuroraBackground className="text-obsidian selection:bg-burgundy selection:text-cream">
       <Navbar />
 
       <main className="pb-16 w-full">
-        {/* Intro Section */}
-        <div className="relative w-full overflow-hidden min-h-[40rem] md:min-h-[50rem]">
-          <div className="relative z-10 w-full">
-            <ContainerScroll
-              titleComponent={<Welcome />}
-            >
-              <Hero />
-            </ContainerScroll>
-          </div>
-        </div>
+        {/* Hero Section */}
+        <Hero />
 
         {/* Content Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

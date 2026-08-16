@@ -1,38 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Cpu, Code, User, Briefcase, Mail, Zap, Trophy, Sun, Moon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X, Cpu, Code, User, Briefcase, Mail, Zap, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GooeyNav from '../UI/GooeyNav/GooeyNav';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [visible, setVisible] = useState(false);
 
-    useEffect(() => {
-        // Initialize theme on mount
-        const theme = localStorage.getItem('theme');
-        if (theme === 'light') {
-            setIsDarkMode(false);
-            document.documentElement.classList.remove('dark');
-        } else {
-            setIsDarkMode(true);
-            document.documentElement.classList.add('dark');
-        }
+    React.useEffect(() => {
+        const handleScroll = () => {
+            // Show main navbar when user scrolls past ~75% of the first viewport (Hero section)
+            if (window.scrollY > window.innerHeight * 0.75) {
+                setVisible(true);
+            } else {
+                setVisible(false);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const toggleTheme = () => {
-        if (isDarkMode) {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-            setIsDarkMode(false);
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            setIsDarkMode(true);
-        }
-    };
-
     const navItems = [
-        { label: 'HOME', icon: <Cpu size={14} />, href: '#welcome' },
+        { label: 'HOME', icon: <Cpu size={14} />, href: '#home' },
         { label: 'ABOUT', icon: <User size={14} />, href: '#about' },
         { label: 'EXPERIENCE', icon: <Briefcase size={14} />, href: '#experience' },
         { label: 'PROJECTS', icon: <Code size={14} />, href: '#projects' },
@@ -46,14 +36,19 @@ const Navbar = () => {
         setIsOpen(false);
 
         const targetId = href.replace('#', '');
-        const element = document.getElementById(targetId);
 
+        if (targetId === 'home') {
+            // HOME always scrolls to very top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
+        const element = document.getElementById(targetId);
         if (element) {
             setTimeout(() => {
                 const offset = 80;
                 const elementPosition = element.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.scrollY - offset;
-
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: "smooth"
@@ -63,39 +58,30 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[98%] max-w-6xl z-50 rounded-2xl border border-white/10 dark:border-white/10 border-slate-300 bg-white/60 dark:bg-white/5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.1)] dark:shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-300">
+        <motion.nav
+            initial={{ y: -100, x: '-50%', opacity: 0 }}
+            animate={{ y: visible ? 0 : -100, x: '-50%', opacity: visible ? 1 : 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="fixed top-4 left-1/2 z-50 w-[98%] max-w-6xl rounded-2xl border border-[#E8DFD8] bg-[#FCF9F5]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(122,23,34,0.06)]"
+        >
             <div className="mx-auto px-4 lg:px-6">
                 <div className="flex items-center justify-between h-14">
                     <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
-                        <span className="font-grotesk font-bold text-sm lg:text-base tracking-wider text-primary-blue group-hover:text-primary-indigo transition-colors duration-300">
-                            PORTFOLIO <span className="text-primary-indigo group-hover:text-primary-blue transition-colors duration-300 hidden sm:inline"></span>
+                        <span className="font-grotesk font-bold text-sm lg:text-base tracking-widest text-[#7A1722] group-hover:text-[#24113F] transition-colors duration-300">
+                            PORTFOLIO
                         </span>
                     </div>
 
                     <div className="hidden md:flex items-center">
-                        <div className="ml-2 lg:ml-4 mr-4">
+                        <div className="ml-2 lg:ml-4">
                             <GooeyNav items={navItems} />
                         </div>
-                        <button
-                            onClick={toggleTheme}
-                            className="p-2 rounded-full bg-slate-200 dark:bg-white/10 text-slate-800 dark:text-white hover:bg-slate-300 dark:hover:bg-white/20 transition-colors"
-                            aria-label="Toggle Theme"
-                        >
-                            {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-                        </button>
                     </div>
 
                     <div className="-mr-2 flex items-center md:hidden gap-2">
                         <button
-                            onClick={toggleTheme}
-                            className="p-2 rounded-full bg-slate-200 dark:bg-white/10 text-slate-800 dark:text-white hover:bg-slate-300 dark:hover:bg-white/20 transition-colors"
-                            aria-label="Toggle Theme"
-                        >
-                            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                        </button>
-                        <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 dark:focus:ring-offset-gray-800 focus:ring-slate-400 dark:focus:ring-white"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-[#6F6868] hover:text-[#7A1722] hover:bg-[#E7C9C9]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#F7F1EB] focus:ring-[#7A1722]"
                         >
                             <span className="sr-only">Open main menu</span>
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -110,7 +96,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden border-b border-white/10 bg-white/95 dark:bg-background/95 backdrop-blur-xl"
+                        className="md:hidden border-b border-[#E8DFD8] bg-[#FCF9F5] backdrop-blur-xl"
                     >
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             {navItems.map((item) => (
@@ -118,7 +104,7 @@ const Navbar = () => {
                                     key={item.label}
                                     href={item.href}
                                     onClick={(e) => handleNavClick(e, item.href)}
-                                    className="text-slate-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium font-code flex items-center gap-3"
+                                    className="text-[#6F6868] hover:text-[#7A1722] hover:bg-[#E7C9C9]/40 block px-3 py-2 rounded-md text-base font-medium font-code flex items-center gap-3"
                                 >
                                     {item.icon}
                                     {item.label}
@@ -128,7 +114,7 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </nav>
+        </motion.nav>
     );
 };
 

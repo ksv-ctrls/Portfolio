@@ -1,86 +1,99 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Database, Globe, Cpu, Brain, Terminal, Layers } from 'lucide-react';
+import { Database, Cpu, Brain, Terminal } from 'lucide-react';
 import SpotlightCard from '../UI/SpotlightCard/SpotlightCard';
 
 const themes = {
-    indigo: {
-        bg: "bg-indigo-500/10",
-        text: "text-indigo-500",
-        border: "border-indigo-500/30 hover:border-indigo-500",
-        spotlight: "rgba(99, 102, 241, 0.15)",
-        glow: "shadow-[0_0_30px_rgba(99,102,241,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(99,102,241,0.4)] dark:hover:shadow-none"
+    programming: { // Deep Plum #24113F & Burgundy #7A1722
+        iconBg: "bg-[#7A1722] text-[#F7F1EB]",
+        iconColor: "#E7C9C9",
+        title: "text-[#FCF9F5]",
+        cardBg: "bg-[#24113F]",
+        border: "border-[#E7C9C9]/40",
+        tag: "bg-[#7A1722]/60 text-[#FCF9F5] border-[#E7C9C9]/30 hover:border-[#E7C9C9]",
+        spotlight: "rgba(231, 201, 201, 0.25)",
+        glow: "shadow-[0_12px_36px_rgba(36,17,63,0.35)]"
     },
-    pink: {
-        bg: "bg-pink-500/10",
-        text: "text-pink-500",
-        border: "border-pink-500/30 hover:border-pink-500",
-        spotlight: "rgba(236, 72, 153, 0.15)",
-        glow: "shadow-[0_0_30px_rgba(236,72,153,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(236,72,153,0.4)] dark:hover:shadow-none"
+    data: { // Dusty Rose #E7C9C9 & Warm Neutral #FCF9F5
+        iconBg: "bg-[#7A1722] text-[#F7F1EB]",
+        iconColor: "#FCF9F5",
+        title: "text-[#211E20]",
+        cardBg: "bg-[#E7C9C9]/40",
+        border: "border-[#E7C9C9]",
+        tag: "bg-[#FCF9F5] text-[#211E20] border-[#E8DFD8] hover:border-[#7A1722]",
+        spotlight: "rgba(122, 23, 34, 0.2)",
+        glow: "shadow-[0_10px_30px_rgba(231,201,201,0.3)]"
     },
-    teal: {
-        bg: "bg-teal-500/10",
-        text: "text-teal-500",
-        border: "border-teal-500/30 hover:border-teal-500",
-        spotlight: "rgba(20, 185, 129, 0.15)",
-        glow: "shadow-[0_0_30px_rgba(20,185,129,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(20,185,129,0.4)] dark:hover:shadow-none"
+    ai: { // Deep Burgundy #7A1722
+        iconBg: "bg-[#24113F] text-[#F7F1EB]",
+        iconColor: "#D2AF6D",
+        title: "text-[#FCF9F5]",
+        cardBg: "bg-[#7A1722]",
+        border: "border-[#E7C9C9]/40",
+        tag: "bg-[#24113F]/60 text-[#FCF9F5] border-[#E7C9C9]/30 hover:border-[#D2AF6D]",
+        spotlight: "rgba(210, 175, 109, 0.25)",
+        glow: "shadow-[0_12px_36px_rgba(122,23,34,0.4)]"
     },
-    blue: {
-        bg: "bg-blue-500/10",
-        text: "text-blue-500",
-        border: "border-blue-500/30 hover:border-blue-500",
-        spotlight: "rgba(59, 130, 246, 0.15)",
-        glow: "shadow-[0_0_30px_rgba(59,130,246,0.2)] dark:shadow-none hover:shadow-[0_0_45px_rgba(59,130,246,0.4)] dark:hover:shadow-none"
+    tools: { // Muted Blue #8EABC8 & Warm Neutral #FCF9F5
+        iconBg: "bg-[#7A1722] text-[#F7F1EB]",
+        iconColor: "#8EABC8",
+        title: "text-[#211E20]",
+        cardBg: "bg-[#8EABC8]/25",
+        border: "border-[#8EABC8]/60",
+        tag: "bg-[#FCF9F5] text-[#211E20] border-[#E8DFD8] hover:border-[#8EABC8]",
+        spotlight: "rgba(142, 171, 200, 0.25)",
+        glow: "shadow-[0_10px_30px_rgba(142,171,200,0.25)]"
     }
 };
 
 const skillsData = [
     {
-        category: 'Programming & Development',
+        category: 'Languages & Core CS',
         icon: Cpu,
-        theme: themes.teal,
-        skills: ['Python', 'Java', 'C', 'C++', 'C#', 'MERN Stack', 'React.js', 'Node.js', 'Express.js', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS']
+        theme: themes.programming,
+        skills: ['Python', 'Java', 'C/C++', 'JavaScript', 'TypeScript', 'SQL', 'Bash', 'Data Structures & Algorithms', 'System Design', 'OOPs', 'DBMS', 'Operating Systems', 'Computer Networks']
     },
     {
-        category: 'Data & Analytics',
+        category: 'Full-Stack Development',
         icon: Database,
-        theme: themes.pink,
-        skills: ['MySQL', 'MongoDB', 'SQL', 'Power BI', 'NumPy', 'Pandas', 'Matplotlib']
+        theme: themes.data,
+        skills: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'REST APIs', 'FastAPI', 'Next.js', 'GraphQL', 'WebSockets', 'HTML5', 'CSS3', 'Tailwind CSS']
     },
     {
-        category: 'AI & Tools',
+        category: 'AI & Machine Learning',
         icon: Brain,
-        theme: themes.indigo,
-        skills: ['Generative AI', 'RAG-based Systems', 'LLM Integration', 'Multi-Agent APIs', 'LangChain', 'TensorFlow', 'Playwright', 'Docker']
+        theme: themes.ai,
+        skills: ['Machine Learning', 'NLP', 'LangChain', 'LangGraph', 'Retrieval Augmented Generation', 'Multi-Agent Systems', 'LLM Integration', 'OpenAI', 'Gemini', 'Prompt Engineering', 'LLM Fine-Tuning', 'LoRA', 'Scikit-learn', 'FAISS', 'Pinecone', 'HuggingFace', 'Transformers', 'Microservices']
     },
     {
-        category: 'Other Skills & Tools',
+        category: 'Cloud, Tools & DevOps',
         icon: Terminal,
-        theme: themes.blue,
-        skills: ['Python-SQL Connectivity', 'JDBC', 'JSP', 'Git & GitHub', 'Vercel', 'VS Code', 'API Integration']
+        theme: themes.tools,
+        skills: ['AWS', 'EC2', 'S3', 'Lambda', 'Docker', 'Git', 'GitHub', 'CI/CD', 'PostgreSQL', 'SQLite', 'Playwright', 'Redis', 'Agile/Scrum']
     }
 ];
 
 const Skills = () => {
     return (
-        <section id="skills" className="py-16 px-4 relative flex flex-col items-center justify-center">
+        <section id="skills" className="py-20 px-4 relative flex flex-col items-center justify-center">
             {/* Section Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-center mb-10"
+                className="text-center mb-12"
             >
-                <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-blue to-primary-violet">
-                    Skills
+                <span className="text-xs font-code tracking-widest text-[#7A1722] uppercase font-bold">TECHNICAL MATRIX</span>
+                <h2 className="text-4xl md:text-5xl font-bold text-[#211E20] tracking-tight mt-2">
+                    Skills &amp; Capabilities
                 </h2>
-                <div className="h-1 w-24 bg-gradient-to-r from-primary-blue to-primary-violet mx-auto mt-4 rounded-full" />
+                <div className="h-1 w-20 bg-[#7A1722] mx-auto mt-4 rounded-full" />
             </motion.div>
 
             <div className="max-w-6xl w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     {skillsData.map((category, catIdx) => {
-                        const Icon = category.icon;
+                        const IconComponent = category.icon;
                         const theme = category.theme;
                         
                         return (
@@ -93,20 +106,21 @@ const Skills = () => {
                                 className="h-full"
                             >
                                 <SpotlightCard 
-                                    className={`h-full rounded-2xl bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 p-6 backdrop-blur-xl flex flex-col transition-shadow ${theme.glow}`}
+                                    className={`h-full rounded-2xl ${theme.cardBg} border ${theme.border} p-6 flex flex-col transition-all duration-300 ${theme.glow}`}
                                     spotlightColor={theme.spotlight}
                                 >
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className={`p-2 ${theme.bg} rounded-xl shrink-0`}>
-                                            <Icon className={theme.text} size={20} />
+                                    <div className="flex items-center gap-3.5 mb-6">
+                                        {/* High-Contrast Explicitly Rendered Icon Container */}
+                                        <div className={`p-3 ${theme.iconBg} rounded-xl shrink-0 flex items-center justify-center shadow-xs z-10`}>
+                                            <IconComponent size={22} style={{ color: theme.iconColor }} />
                                         </div>
-                                        <h3 className="text-lg font-bold text-slate-800 dark:text-white leading-tight">{category.category}</h3>
+                                        <h3 className={`text-lg font-bold ${theme.title} leading-tight`}>{category.category}</h3>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {category.skills.map((skill, skillIdx) => (
                                             <span
                                                 key={skillIdx}
-                                                className={`px-3 py-1.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5 rounded-md text-xs font-code text-slate-600 dark:text-gray-300 transition-colors duration-300 ${theme.border} hover:bg-black/10 dark:hover:bg-white/10 cursor-default`}
+                                                className={`px-3 py-1.5 border rounded-md text-xs font-code font-semibold transition-colors duration-300 ${theme.tag} cursor-default`}
                                             >
                                                 {skill}
                                             </span>
@@ -118,9 +132,6 @@ const Skills = () => {
                     })}
                 </div>
             </div>
-
-            {/* Background Decor */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-primary-indigo/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
         </section>
     );
 };

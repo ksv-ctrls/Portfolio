@@ -1,115 +1,62 @@
-import { motion } from 'framer-motion';
-import TextType from '../Welcome/TextType';
-import BlurText from '../UI/Animations/BlurText';
-import { FileText, Download } from 'lucide-react';
+import React from 'react';
+import { MinimalistHero } from '../UI/MinimalistHero/MinimalistHero';
+import portraitImg from '../../assets/1000221159.png';
 
-const Hero = () => {
-    return (
-        <div className="relative z-20 mx-auto px-4 transition-all duration-500 mb-8 max-w-7xl flex justify-center">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative pointer-events-auto bg-white/60 dark:bg-black/40 backdrop-blur-2xl border border-black/10 dark:border-white/10 rounded-3xl p-8 md:p-12 shadow-[0_0_40px_rgba(0,0,0,0.1)] dark:shadow-[0_0_40px_rgba(0,0,0,0.4)] overflow-hidden w-[90vw] md:w-[800px] lg:w-[1000px] min-h-[250px] md:min-h-[350px] flex flex-col justify-center items-center text-center"
-            >
-                {/* Background Glows */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50 md:opacity-0">
-                    <motion.div
-                        animate={{
-                            x: [0, 20, 0],
-                            y: [0, -20, 0],
-                        }}
-                        transition={{
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="absolute -top-10 -left-10 w-32 h-32 bg-primary-indigo/10 rounded-full blur-2xl"
-                    />
-                    <motion.div
-                        animate={{
-                            x: [0, -30, 0],
-                            y: [0, 30, 0],
-                        }}
-                        transition={{
-                            duration: 12,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="absolute -bottom-10 -right-10 w-24 h-24 bg-primary-blue/10 rounded-full blur-2xl"
-                    />
-                </div>
-
-                <div className="relative z-10">
-                    <div className="flex flex-wrap items-center justify-center gap-x-2 mb-2">
-                        <BlurText
-                            text="Kalaa Sri"
-                            delay={150}
-                            animateBy="letters"
-                            direction="top"
-                            className="text-3xl md:text-5xl font-bold text-slate-800 dark:text-white tracking-tight drop-shadow-sm dark:drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
-                        />
-                        <BlurText
-                            text="Varshini"
-                            delay={150}
-                            animateBy="letters"
-                            direction="bottom"
-                            className="text-3xl md:text-5xl font-bold text-primary-blue tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0)]"
-                        />
-                    </div>
-
-
-
-                    <div className="space-y-2">
-                        <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white opacity-95 drop-shadow-sm dark:drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)]">
-                            I am a
-                        </h2>
-                        <div className="text-xl md:text-3xl font-bold text-primary-indigo h-[1.4em] flex items-center justify-center">
-                            <TextType
-                                text={[
-                                    "Full Stack Developer (MERN)",
-                                    "Gen AI Programmer",
-                                    "UI/UX Designer",
-                                    "Machine Learning Engineer"
-                                ]}
-                                typingSpeed={60}
-                                pauseDuration={2000}
-                                loop={true}
-                                showCursor={true}
-                                cursorCharacter="_"
-                            />
-                        </div>
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.5 }}
-                        className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
-                    >
-                        <a
-                            href="/resume.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)]"
-                        >
-                            <FileText size={18} className="group-hover:-translate-y-0.5 transition-transform" />
-                            View Resume
-                        </a>
-                        <a
-                            href="/cv.pdf"
-                            download
-                            className="group flex items-center gap-2 px-6 py-3 border-2 border-indigo-500/50 text-indigo-700 dark:text-indigo-300 rounded-full font-semibold hover:bg-indigo-500/10 dark:hover:bg-indigo-500/20 hover:scale-105 transition-all duration-300"
-                        >
-                            <Download size={18} className="group-hover:translate-y-0.5 transition-transform" />
-                            Download CV
-                        </a>
-                    </motion.div>
-                </div>
-            </motion.div>
-        </div>
-    );
+/* ─── smooth scroll helper ──────────────────────────────────── */
+const goto = (id) => {
+    if (id === 'home') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
 };
+
+/* ─── local nav links ───────────────────────────────────────── */
+const navLinks = [
+    { label: 'HOME',       href: '#home',       onClick: (e) => { e.preventDefault(); goto('home'); } },
+    { label: 'ABOUT',      href: '#about',      onClick: (e) => { e.preventDefault(); goto('about'); } },
+    { label: 'EXPERIENCE', href: '#experience', onClick: (e) => { e.preventDefault(); goto('experience'); } },
+    { label: 'PROJECTS',   href: '#projects',   onClick: (e) => { e.preventDefault(); goto('projects'); } },
+];
+
+/* ─── left-side visual hierarchy content ─────────────────────── */
+const mainTextContent = (
+    <div className="space-y-5 text-left">
+        <div className="space-y-1">
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-foreground uppercase leading-none">
+                KALAA SRI
+            </h1>
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-burgundy uppercase leading-none">
+                VARSHINI
+            </h1>
+        </div>
+        <div className="space-y-0.5 text-xs font-bold tracking-widest text-foreground/50 uppercase font-code">
+            <p>AI / ML ENGINEER</p>
+            <p>FULL STACK DEVELOPER</p>
+        </div>
+        <div className="w-16 h-[2.5px] bg-burgundy"></div>
+        <p className="text-sm leading-relaxed text-foreground/80 max-w-xs font-medium">
+            Building intelligent digital experiences with AI, ML, GenAI and full-stack technology.
+        </p>
+    </div>
+);
+
+const Hero = () => (
+    <MinimalistHero
+        logoText="KSV."
+        navLinks={navLinks}
+        mainText={mainTextContent}
+        readMoreHref="#contact"
+        readMoreLabel="GET IN TOUCH →"
+        imageSrc={portraitImg}
+        imageAlt="Kalaa Sri Varshini — AI/ML Engineer & Full Stack Developer"
+        overlayText={{
+            part1: 'BUILD',
+            part2: 'INTELLIGENT',
+            part3: 'SOLUTIONS',
+        }}
+        footerLeft="AI / ML ENGINEER  ·  FULL STACK DEVELOPER"
+        locationText="Chennai, India"
+    />
+);
 
 export default Hero;
